@@ -23,6 +23,9 @@ class GameState {
 
 class PlayerState {
     var hp by mutableStateOf(100)
+    var baseDamage by mutableStateOf(1)
+    var statsWindowVisible by mutableStateOf(false)
+    var position by mutableStateOf(IntOffset(0, 0))
 }
 
 @Composable
@@ -74,7 +77,6 @@ fun App() {
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
-    }
+    val state = remember { GameState() }
+    MainWindow(state, this)
 }
