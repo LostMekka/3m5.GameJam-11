@@ -70,6 +70,7 @@ class EnemyState(
     var position by mutableStateOf(Offset(x.toFloat(), y.toFloat()))
     var velocity by mutableStateOf(Offset.Zero)
     val speed: Float = 4f
+    var cooldown by mutableStateOf(10)
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is EnemyState && other.id == id

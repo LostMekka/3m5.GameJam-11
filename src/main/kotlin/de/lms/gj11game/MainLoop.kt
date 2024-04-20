@@ -1,5 +1,6 @@
 package de.lms.gj11game
 
+import androidx.compose.ui.geometry.Offset
 import de.lms.gj11game.data.resourceDepositDropTable
 import de.lms.gj11game.data.toInventory
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ suspend fun mainLoop(state: GameState) {
 
         spawnEnemies(state)
         moveEnemies(state)
+        handleDamage(state)
         updateResourceScanning(state, dt)
     }
 }
@@ -45,5 +47,19 @@ private fun updateResourceScanning(state: GameState, dt: Float) {
             )
             null
         } else newProgress
+    }
+}
+
+private fun handleDamage(state: GameState) {
+    val playerOffset = state.player.position.let { Offset(it.x.toFloat(), it.y.toFloat()) }
+    state.enemies.forEach {
+        if (it.position.distance(playerOffset) < (state.player.width + it.width) / 2) {
+            if (it.cooldown == 0) {
+                state.player.hp -= 1
+                it.cooldown = 10
+            } else {
+                it.cooldown--
+            }
+        }
     }
 }

@@ -160,4 +160,4 @@ private fun Offset.normalizeCap(targetLength: Float = 1f): Offset {
 private val Offset.length
     get() = sqrt(x * x + y * y)
 
-private fun Offset.distance(other: Offset): Float = (this - other).length
+fun Offset.distance(other: Offset): Float = (this - other).length
