@@ -7,7 +7,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.IntOffset
 import java.util.*
 
+enum class AreaType {
+    Plains,
+    Forest,
+    Hills,
+    Mountains,
+    Caves,
+    Dungeon,
+}
+
 enum class ResourceType {
+    Plants,
     Stone,
     Wood,
     Iron,
@@ -22,7 +32,7 @@ data class ResourcePack(val type: ResourceType, val amount: Int)
 operator fun ResourceType.times(amount: Int) = ResourcePack(this, amount)
 
 class GameState {
-    var score by mutableStateOf(0)
+    var currentArea by mutableStateOf(AreaType.Plains)
     var resourceScanningProgress by mutableStateOf<Float?>(null)
     val inventory = Inventory()
     var player by mutableStateOf(PlayerState())

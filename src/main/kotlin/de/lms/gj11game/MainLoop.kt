@@ -4,6 +4,7 @@ import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 const val frameDelay = 100L
+
 // TODO: find out whether state changes from within here are actually thread safe!
 suspend fun mainLoop(state: GameState) {
     while (true) {
@@ -24,11 +25,12 @@ private fun spawnEnemies(state: GameState) {
             dropInventory = Inventory(
                 ResourceType.Meat * (Random.nextInt(5)),
                 ResourceType.Bones * (Random.nextInt(3)),
-            )
+            ),
         )
     }
 }
 
+@Suppress("SameParameterValue")
 private fun updateResourceScanning(state: GameState, dt: Float) {
     state.resourceScanningProgress = state.resourceScanningProgress?.let {
         val newProgress = it + state.player.resourceScanningSpeed * dt
@@ -36,7 +38,7 @@ private fun updateResourceScanning(state: GameState, dt: Float) {
             state.resourceFields += ResourceFieldState(
                 x = Random.nextInt(300, 1000),
                 y = Random.nextInt(300, 600),
-                inventory = Inventory(ResourceType.entries.random() * (10 + Random.nextInt(20))),
+                inventory = resourceDepositDropTable[state.currentArea].toInventory(),
             )
             null
         } else newProgress

@@ -43,6 +43,7 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
         }
         Column {
             if (state.isRevealed) {
+                if (state.inventory.isEmpty()) Text("no resources found")
                 for ((type, amount) in state.inventory) {
                     Button(
                         onClick = {
