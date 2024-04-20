@@ -1,5 +1,7 @@
 package de.lms.gj11game
 
+import de.lms.gj11game.data.resourceDepositDropTable
+import de.lms.gj11game.data.toInventory
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
