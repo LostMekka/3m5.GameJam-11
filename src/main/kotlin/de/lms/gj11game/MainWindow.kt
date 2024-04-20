@@ -25,10 +25,9 @@ fun MainWindow(state: GameState, applicationScope: ApplicationScope) {
         PlayerInfoWindow(state.player)
         EnemyWindows(state)
         ResourceFieldWindows(state)
+        ResourceInventoryWindow(state)
 
         Column {
-            for (type in ResourceType.entries) if (type in state.inventory) Text("$type: ${state.inventory[type]}")
-
             Button(
                 onClick = { state.player.statsWindowVisible = true },
                 enabled = !state.player.statsWindowVisible,
