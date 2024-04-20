@@ -7,6 +7,13 @@ import androidx.compose.ui.window.application
 class GameState {
     var score by mutableStateOf(0)
     var player by mutableStateOf(PlayerState())
+    val enemies = mutableStateListOf<EnemyState>()
+}
+
+class EnemyState(hp: Int, x: Int, y: Int) {
+    var hp by mutableStateOf(hp)
+    val maxHp = hp
+    var position by mutableStateOf(IntOffset(x, y))
 }
 
 class PlayerState {

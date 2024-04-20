@@ -18,7 +18,7 @@ fun CharacterInfoWindow(state: PlayerState) {
     Window(
         onCloseRequest = { state.statsWindowVisible = false },
         state = WindowState(
-            width = 200.dp,
+            width = 400.dp,
             height = 200.dp,
             position = WindowPosition(state.position.x.dp, state.position.y.dp),
         ),

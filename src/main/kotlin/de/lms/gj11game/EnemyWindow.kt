@@ -14,35 +14,36 @@ import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.delay
 
 @Composable
-fun EnemyWindow(onDeath: () -> Unit, player: PlayerState, initialPosition: IntOffset = IntOffset.Zero) {
-    val maxHealth = 20
-    val health = remember { mutableStateOf(maxHealth) }
-    val state = rememberWindowState(
-        position = WindowPosition(initialPosition.x.dp, initialPosition.y.dp),
-        width = 200.dp,
+fun EnemyWindows(state: GameState) {
+    for (enemy in state.enemies) EnemyWindow(enemy, state.player) { state.enemies -= enemy }
+}
+
+@Composable
+fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
+    val windowState = rememberWindowState(
+        position = WindowPosition(state.position.x.dp, state.position.y.dp),
+        width = 400.dp,
         height = 100.dp,
     )
     val movement = remember { mutableStateOf(IntOffset.Zero) }
 
     val onClick = {
-        health.value -= player.baseDamage
-        if (health.value <= 0) {
-            onDeath()
-        }
+        state.hp -= player.baseDamage
+        if (state.hp <= 0) onDeath()
     }
 
     Window(
         onCloseRequest = onClick,
-        state = state,
+        state = windowState,
         resizable = false,
-        title = "Enemy ${health.value} / $maxHealth"
+        title = "Enemy ${state.hp} / ${state.maxHp}"
     ) {
-        LaunchedEffect(state) {
+        LaunchedEffect(windowState) {
             while (true) {
                 delay(100)
-                if (state.isMinimized) {
+                if (windowState.isMinimized) {
                     onClick()
-                    state.isMinimized = false
+                    windowState.isMinimized = false
                 }
             }
         }

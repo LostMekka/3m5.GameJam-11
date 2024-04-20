@@ -21,6 +21,7 @@ fun MainWindow(state: GameState, applicationScope: ApplicationScope) {
         title = "This is a Game! Don't let anyone tell you otherwise!",
     ) {
         CharacterInfoWindow(state.player)
+        EnemyWindows(state)
         Column {
             Text("Score: ${state.score}")
             Button(
