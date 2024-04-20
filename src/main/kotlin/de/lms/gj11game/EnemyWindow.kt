@@ -1,11 +1,17 @@
 package de.lms.gj11game
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
@@ -27,6 +33,8 @@ fun EnemyWindows(state: GameState) {
         }
     }
 }
+
+private val enemyButtonColor = Color(0xFFDD0000)
 
 @Composable
 fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
@@ -60,9 +68,16 @@ fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
             }
         }
 
-        Column {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Text(health)
-            Button(onClick = onClick) {
+            Button(
+                onClick = onClick,
+                colors = ButtonDefaults.buttonColors(backgroundColor = enemyButtonColor, contentColor = Color.White),
+            ) {
                 Text("Attack")
             }
         }
