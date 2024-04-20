@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
+import kotlin.math.floor
 
 
 @Composable
@@ -22,13 +23,27 @@ fun MainWindow(state: GameState, applicationScope: ApplicationScope) {
     ) {
         CharacterInfoWindow(state.player)
         EnemyWindows(state)
+        ResourceFieldWindows(state)
         Column {
             Text("Score: ${state.score}")
+
             Button(
                 onClick = { state.player.statsWindowVisible = true },
                 enabled = !state.player.statsWindowVisible,
             ) {
                 Text("Show player stats")
+            }
+
+            val progress = state.resourceScanningProgress
+            Button(
+                onClick = { state.resourceScanningProgress = 0f },
+                enabled = progress == null,
+            ) {
+                if (progress == null) {
+                    Text("Scan for resource deposit")
+                } else {
+                    Text("Scanning for resource deposit... (${floor(progress * 100)}%)")
+                }
             }
         }
     }
