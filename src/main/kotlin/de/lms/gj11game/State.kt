@@ -102,9 +102,11 @@ class ResourceFieldState(
     val id: UUID = UUID.randomUUID()
     var revealProgress by mutableStateOf(if (spawnsRevealed) 1f else 0f)
     val isRevealed get() = revealProgress >= 1f
+    var isCollapsed by mutableStateOf(false)
     var width by mutableStateOf(width)
     var height by mutableStateOf(height)
     var position by mutableStateOf(Offset(x, y))
+    var stability by mutableStateOf(1f)
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is ResourceFieldState && other.id == id

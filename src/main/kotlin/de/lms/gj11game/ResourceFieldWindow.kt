@@ -6,7 +6,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
@@ -14,6 +13,7 @@ import androidx.compose.ui.window.WindowState
 import kotlinx.coroutines.delay
 import kotlin.math.floor
 import kotlin.math.min
+import kotlin.random.Random
 
 @Composable
 fun ResourceFieldWindows(state: GameState) {
@@ -40,10 +40,21 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
                 delay(100)
                 state.position = Offset(window.x + state.width / 2f, window.y + state.height / 2f)
                 if (window.isMinimized) gameState.resourceFields -= state
+
+                if (state.isRevealed && !state.isCollapsed && !window.isActive) state.stability -= 0.001f
+
+                if (state.stability < 0.95) {
+                    val chance = 1 - state.stability
+                    if (Random.nextFloat() < chance * chance * chance) {
+                        state.isCollapsed = true
+                    }
+                }
             }
         }
         Column {
-            if (state.isRevealed) {
+            if (state.isCollapsed) {
+                Text("Collapsed ${state.stability}")
+            } else if (state.isRevealed) {
                 if (state.inventory.isEmpty()) Text("no resources found")
                 for ((type, amount) in state.inventory) {
                     Button(
@@ -57,6 +68,8 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
                         Text("Mine $type ($amount)")
                     }
                 }
+
+                Text("Stability: ${floor(state.stability * 1000) / 10}%")
             } else {
                 Text("Reveal progress: ${floor(state.revealProgress * 100)}%")
                 Button(onClick = { state.revealProgress += gameState.player.resourceRevealSpeed }) {
