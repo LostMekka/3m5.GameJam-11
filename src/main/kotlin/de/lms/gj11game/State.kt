@@ -82,7 +82,7 @@ class PlayerState {
     var resourceRevealSpeed by mutableStateOf(0.1f) // TODO: make smaller initially
     var resourceMiningSpeed by mutableStateOf(1)
     var statsWindowVisible by mutableStateOf(true)
-    var width by mutableStateOf(180)
+    var width by mutableStateOf(250)
     var height by mutableStateOf(150)
     var position by mutableStateOf(IntOffset(width / 2, height / 2))
     var infoWidth by mutableStateOf(400)
