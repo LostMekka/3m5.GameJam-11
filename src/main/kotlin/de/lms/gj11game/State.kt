@@ -88,8 +88,8 @@ class PlayerState {
 }
 
 class ResourceFieldState(
-    x: Int,
-    y: Int,
+    x: Float,
+    y: Float,
     width: Int = 300,
     height: Int = 300,
     val inventory: Inventory,
@@ -100,7 +100,7 @@ class ResourceFieldState(
     val isRevealed get() = revealProgress >= 1f
     var width by mutableStateOf(width)
     var height by mutableStateOf(height)
-    var position by mutableStateOf(IntOffset(x, y))
+    var position by mutableStateOf(Offset(x, y))
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is ResourceFieldState && other.id == id
