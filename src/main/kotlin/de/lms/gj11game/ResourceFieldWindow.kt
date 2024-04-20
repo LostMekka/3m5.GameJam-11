@@ -5,6 +5,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -37,7 +38,7 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
         LaunchedEffect(key1 = state) {
             while (true) {
                 delay(100)
-                state.position = IntOffset(window.x + state.width / 2, window.y + state.height / 2)
+                state.position = Offset(window.x + state.width / 2f, window.y + state.height / 2f)
                 if (window.isMinimized) gameState.resourceFields -= state
             }
         }

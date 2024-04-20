@@ -39,8 +39,8 @@ private fun updateResourceScanning(state: GameState, dt: Float) {
         val newProgress = it + state.player.resourceScanningSpeed * dt
         if (newProgress >= 1) {
             state.resourceFields += ResourceFieldState(
-                x = Random.nextInt(300, 1000),
-                y = Random.nextInt(300, 600),
+                x = Random.nextInt(300, 1000).toFloat(),
+                y = Random.nextInt(300, 600).toFloat(),
                 inventory = resourceDepositDropTable[state.currentArea].toInventory(),
             )
             null
