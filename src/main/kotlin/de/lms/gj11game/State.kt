@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.IntOffset
 import java.util.*
 
@@ -66,7 +67,9 @@ class EnemyState(
     val maxHp = hp
     var width by mutableStateOf(width)
     var height by mutableStateOf(height)
-    var position by mutableStateOf(IntOffset(x, y))
+    var position by mutableStateOf(Offset(x.toFloat(), y.toFloat()))
+    var velocity by mutableStateOf(Offset.Zero)
+    val speed: Float = 4f
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is EnemyState && other.id == id
@@ -78,7 +81,7 @@ class PlayerState {
     var resourceScanningSpeed by mutableStateOf(0.4f) // TODO: make smaller initially
     var resourceRevealSpeed by mutableStateOf(0.1f) // TODO: make smaller initially
     var resourceMiningSpeed by mutableStateOf(1)
-    var statsWindowVisible by mutableStateOf(false)
+    var statsWindowVisible by mutableStateOf(true)
     var width by mutableStateOf(400)
     var height by mutableStateOf(200)
     var position by mutableStateOf(IntOffset(width / 2, height / 2))

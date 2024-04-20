@@ -14,6 +14,7 @@ suspend fun mainLoop(state: GameState) {
         val dt = frameDelay / 1000f
 
         spawnEnemies(state)
+        moveEnemies(state)
         updateResourceScanning(state, dt)
     }
 }
