@@ -16,7 +16,17 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun EnemyWindows(state: GameState) {
-    for (enemy in state.enemies) EnemyWindow(enemy, state.player) { state.enemies -= enemy }
+    for (enemy in state.enemies) EnemyWindow(enemy, state.player) {
+        state.enemies -= enemy
+        if (enemy.dropInventory.isNotEmpty()) {
+            state.resourceFields += ResourceFieldState(
+                x = enemy.position.x,
+                y = enemy.position.y,
+                inventory = enemy.dropInventory,
+                spawnsRevealed = true,
+            )
+        }
+    }
 }
 
 @Composable
@@ -31,12 +41,15 @@ fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
     Window(
         onCloseRequest = onClick,
         state = WindowState(
-            position = WindowPosition((state.position.x - state.width / 2).dp, (state.position.y - state.height / 2).dp),
+            position = WindowPosition(
+                (state.position.x - state.width / 2).dp,
+                (state.position.y - state.height / 2).dp,
+            ),
             width = state.width.dp,
             height = state.height.dp,
         ),
         resizable = false,
-        title = "Enemy ${state.hp} / ${state.maxHp}"
+        title = "Enemy ${state.hp} / ${state.maxHp}",
     ) {
         LaunchedEffect(state) {
             while (true) {

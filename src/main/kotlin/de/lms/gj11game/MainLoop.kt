@@ -21,6 +21,10 @@ private fun spawnEnemies(state: GameState) {
             hp = 10,
             x = Random.nextInt(300, 1000),
             y = Random.nextInt(300, 600),
+            dropInventory = Inventory(
+                ResourceType.Meat * (Random.nextInt(5)),
+                ResourceType.Bones * (Random.nextInt(3)),
+            )
         )
     }
 }
@@ -32,7 +36,7 @@ private fun updateResourceScanning(state: GameState, dt: Float) {
             state.resourceFields += ResourceFieldState(
                 x = Random.nextInt(300, 1000),
                 y = Random.nextInt(300, 600),
-                ResourceType.entries.random() * (10 + Random.nextInt(20)),
+                inventory = Inventory(ResourceType.entries.random() * (10 + Random.nextInt(20))),
             )
             null
         } else newProgress

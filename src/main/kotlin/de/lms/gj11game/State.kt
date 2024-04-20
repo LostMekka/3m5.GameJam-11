@@ -38,9 +38,19 @@ class Inventory(vararg resources: ResourcePack) {
     operator fun set(type: ResourceType, value: Int) { stateMap[type] = value }
     operator fun iterator() = stateMap.iterator()
     operator fun contains(type: ResourceType) = stateMap.containsKey(type)
+    fun isEmpty() = stateMap.isEmpty()
+    fun isNotEmpty() = stateMap.isNotEmpty()
+    val size get() = stateMap.size
 }
 
-class EnemyState(hp: Int, x: Int, y: Int, width: Int = 400, height: Int = 100) {
+class EnemyState(
+    hp: Int,
+    x: Int,
+    y: Int,
+    width: Int = 400,
+    height: Int = 100,
+    val dropInventory: Inventory = Inventory(),
+) {
     val id: UUID = UUID.randomUUID()
     var hp by mutableStateOf(hp)
     val maxHp = hp
@@ -64,14 +74,20 @@ class PlayerState {
     var position by mutableStateOf(IntOffset(width / 2, height / 2))
 }
 
-class ResourceFieldState(x: Int, y: Int, vararg resources: ResourcePack) {
+class ResourceFieldState(
+    x: Int,
+    y: Int,
+    width: Int = 300,
+    height: Int = 300,
+    val inventory: Inventory,
+    spawnsRevealed: Boolean = false,
+) {
     val id: UUID = UUID.randomUUID()
-    var revealProgress by mutableStateOf(0f)
+    var revealProgress by mutableStateOf(if (spawnsRevealed) 1f else 0f)
     val isRevealed get() = revealProgress >= 1f
-    val inventory = Inventory(*resources)
-    var width by mutableStateOf(300)
-    var height by mutableStateOf(300)
-    var position by mutableStateOf(IntOffset(x + width / 2, y + height / 2))
+    var width by mutableStateOf(width)
+    var height by mutableStateOf(height)
+    var position by mutableStateOf(IntOffset(x, y))
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is ResourceFieldState && other.id == id
