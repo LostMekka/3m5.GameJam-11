@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
@@ -28,7 +28,7 @@ fun PlayerInfoWindow(state: PlayerState) {
         LaunchedEffect(key1 = state) {
             while (true) {
                 delay(100)
-                state.infoPosition = IntOffset(window.x + state.infoWidth / 2, window.y + state.infoHeight / 2)
+                state.infoPosition = Offset(window.x + state.infoWidth / 2f, window.y + state.infoHeight / 2f)
                 if (window.isMinimized) {
                     state.statsWindowVisible = false
                 }

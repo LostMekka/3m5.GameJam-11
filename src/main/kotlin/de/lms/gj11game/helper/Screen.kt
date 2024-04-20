@@ -1,5 +1,6 @@
 package de.lms.gj11game.helper
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
@@ -20,6 +21,15 @@ fun randomlyPositionedWindowState(windowWidth: Int, windowHeight: Int) =
 
 fun randomScreenPosition(windowWidth: Int, windowHeight: Int) =
     WindowPosition(
-        (Random.nextFloat() * (screenWidth - windowWidth) + windowWidth / 2f).dp,
-        (Random.nextFloat() * (screenHeight - windowHeight) + windowHeight / 2f).dp,
+        randomWindowXPosition(windowWidth).dp,
+        randomWindowYPosition(windowHeight).dp,
     )
+
+fun randomScreenPositionOffset(windowWidth: Int, windowHeight: Int) =
+    Offset(
+        randomWindowXPosition(windowWidth),
+        randomWindowYPosition(windowHeight),
+    )
+
+fun randomWindowYPosition(windowHeight: Int) = Random.nextFloat() * (screenHeight - windowHeight) + windowHeight / 2f
+fun randomWindowXPosition(windowWidth: Int) = Random.nextFloat() * (screenWidth - windowWidth) + windowWidth / 2f

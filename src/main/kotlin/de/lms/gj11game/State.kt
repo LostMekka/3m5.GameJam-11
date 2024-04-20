@@ -9,6 +9,9 @@ import androidx.compose.ui.unit.IntOffset
 import de.lms.gj11game.data.CraftingAction
 import de.lms.gj11game.data.CraftingStation
 import de.lms.gj11game.data.globalStation
+import de.lms.gj11game.helper.randomScreenPositionOffset
+import de.lms.gj11game.helper.randomWindowXPosition
+import de.lms.gj11game.helper.randomWindowYPosition
 import java.util.*
 import kotlin.random.Random
 
@@ -52,7 +55,7 @@ class CraftingStationState(val station: CraftingStation, state: ActionButtonStat
     var state by mutableStateOf(state)
     var width by mutableStateOf(400)
     var height by mutableStateOf(400)
-    var position by mutableStateOf(Offset(Random.nextFloat() * 800 + 200, Random.nextFloat() * 300 + 200))
+    var position by mutableStateOf(randomScreenPositionOffset(width, height))
     val actions = station.actions.map { CraftingActionState(it) }
     val innerStations = station.innerStations.map { CraftingStationState(it) }
 }
@@ -119,14 +122,14 @@ class PlayerState {
     var position by mutableStateOf(IntOffset(width / 2, height / 2))
     var infoWidth by mutableStateOf(400)
     var infoHeight by mutableStateOf(200)
-    var infoPosition by mutableStateOf(IntOffset(infoWidth / 2 + width + 20, infoHeight / 2))
+    var infoPosition by mutableStateOf(randomScreenPositionOffset(infoWidth, infoHeight))
 }
 
 class ResourceFieldState(
-    x: Float,
-    y: Float,
     width: Int = 300,
     height: Int = 300,
+    x: Float = randomWindowXPosition(width),
+    y: Float = randomWindowYPosition(height),
     val inventory: Inventory,
     spawnsRevealed: Boolean = false,
 ) {
