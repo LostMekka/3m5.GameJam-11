@@ -3,7 +3,7 @@ package de.lms.gj11game
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
@@ -47,6 +47,8 @@ fun MainWindow(state: GameState, applicationScope: ApplicationScope) {
                     Text("Scanning for resource deposit... (${floor(progress * 100)}%)")
                 }
             }
+
+            CraftingStationUnlockView(state.craftingStation, state)
         }
     }
 }

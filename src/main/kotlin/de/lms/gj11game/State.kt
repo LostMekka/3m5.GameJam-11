@@ -6,7 +6,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.IntOffset
+import de.lms.gj11game.data.CraftingAction
+import de.lms.gj11game.data.CraftingStation
+import de.lms.gj11game.data.globalStation
 import java.util.*
+import kotlin.random.Random
 
 enum class AreaType {
     Plains,
@@ -39,19 +43,46 @@ class GameState {
     var player by mutableStateOf(PlayerState())
     val enemies = mutableStateListOf<EnemyState>()
     val resourceFields = mutableStateListOf<ResourceFieldState>()
+    val craftingStation = CraftingStationState(globalStation)
 }
 
-class Inventory(vararg resources: ResourcePack) {
+enum class ActionButtonState { Hidden, Visible, Unlocked }
+
+class CraftingStationState(val station: CraftingStation, state: ActionButtonState = ActionButtonState.Hidden) {
+    var state by mutableStateOf(state)
+    var width by mutableStateOf(400)
+    var height by mutableStateOf(400)
+    var position by mutableStateOf(Offset(Random.nextFloat() * 800 + 200, Random.nextFloat() * 300 + 200))
+    val actions = station.actions.map { CraftingActionState(it) }
+    val innerStations = station.innerStations.map { CraftingStationState(it) }
+}
+
+class CraftingActionState(val action: CraftingAction, visible: Boolean = false) {
+    var visible by mutableStateOf(visible)
+}
+
+class Inventory(vararg resources: ResourcePack): Iterable<Map.Entry<ResourceType, Int>> {
     private val stateMap = mutableStateMapOf<ResourceType, Int>().also {
         for ((type, amount) in resources) it[type] = amount
     }
     operator fun get(type: ResourceType) = stateMap[type] ?: 0
     operator fun set(type: ResourceType, value: Int) { stateMap[type] = value }
-    operator fun iterator() = stateMap.iterator()
+    override operator fun iterator() = stateMap.iterator()
     operator fun contains(type: ResourceType) = stateMap.containsKey(type)
+    operator fun contains(resources: ResourcePack) = this[resources.type] >= resources.amount
+    operator fun contains(resources: Inventory) = resources.all { (type, amount) -> this[type] >= amount }
+    operator fun plusAssign(other: Inventory) {
+        for ((type, amount) in other) this[type] += amount
+    }
+    operator fun minusAssign(other: Inventory) {
+        for ((type, amount) in other) this[type] -= amount
+    }
     fun isEmpty() = stateMap.isEmpty()
     fun isNotEmpty() = stateMap.isNotEmpty()
     val size get() = stateMap.size
+    fun toShortString() = if (isEmpty()) "free" else ResourceType.entries
+        .filter { it in this }
+        .joinToString(separator = ",") { "$it:${this[it]}" }
 }
 
 class EnemyState(
