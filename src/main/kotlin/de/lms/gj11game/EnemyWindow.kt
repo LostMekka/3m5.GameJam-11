@@ -1,6 +1,6 @@
 package de.lms.gj11game
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -35,6 +35,7 @@ fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
         if (state.hp <= 0) onDeath()
     }
 
+    val health = "${state.hp} / ${state.maxHp} HP"
     Window(
         onCloseRequest = onClick,
         state = WindowState(
@@ -46,7 +47,7 @@ fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
             height = state.height.dp,
         ),
         resizable = false,
-        title = "Enemy ${state.hp} / ${state.maxHp}",
+        title = "Enemy $health",
     ) {
         LaunchedEffect(state) {
             while (true) {
@@ -58,11 +59,11 @@ fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
             }
         }
 
-        Row {
+        Column {
+            Text(health)
             Button(onClick = onClick) {
                 Text("Attack")
             }
-            Text(state.id.toString())
         }
     }
 }

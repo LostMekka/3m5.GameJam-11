@@ -21,7 +21,8 @@ fun MainWindow(state: GameState, applicationScope: ApplicationScope) {
         ),
         title = "This is a Game! Don't let anyone tell you otherwise!",
     ) {
-        CharacterInfoWindow(state.player)
+        PlayerWindow(state.player)
+        PlayerInfoWindow(state.player)
         EnemyWindows(state)
         ResourceFieldWindows(state)
 

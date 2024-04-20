@@ -58,7 +58,7 @@ class EnemyState(
     hp: Int,
     x: Int,
     y: Int,
-    width: Int = 400,
+    width: Int = 90,
     height: Int = 100,
     val dropInventory: Inventory = Inventory(),
 ) {
@@ -82,9 +82,12 @@ class PlayerState {
     var resourceRevealSpeed by mutableStateOf(0.1f) // TODO: make smaller initially
     var resourceMiningSpeed by mutableStateOf(1)
     var statsWindowVisible by mutableStateOf(true)
-    var width by mutableStateOf(400)
-    var height by mutableStateOf(200)
+    var width by mutableStateOf(180)
+    var height by mutableStateOf(150)
     var position by mutableStateOf(IntOffset(width / 2, height / 2))
+    var infoWidth by mutableStateOf(400)
+    var infoHeight by mutableStateOf(200)
+    var infoPosition by mutableStateOf(IntOffset(infoWidth / 2 + width + 20, infoHeight / 2))
 }
 
 class ResourceFieldState(

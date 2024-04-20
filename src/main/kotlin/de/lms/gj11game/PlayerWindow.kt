@@ -13,8 +13,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun CharacterInfoWindow(state: PlayerState) {
-    if (!state.statsWindowVisible) return
+fun PlayerWindow(state: PlayerState) {
     Window(
         onCloseRequest = { state.statsWindowVisible = false },
         state = WindowState(
@@ -23,7 +22,7 @@ fun CharacterInfoWindow(state: PlayerState) {
             position = WindowPosition((state.position.x - state.width / 2).dp, (state.position.y - state.height / 2).dp),
         ),
         resizable = false,
-        title = "Character Information",
+        title = "Player",
     ) {
         LaunchedEffect(key1 = state) {
             while (true) {
@@ -34,10 +33,6 @@ fun CharacterInfoWindow(state: PlayerState) {
                     window.isMinimized = false
                 }
             }
-        }
-        Column {
-            Text("HP: ${state.hp}")
-            Text("Base damage: ${state.baseDamage}")
         }
     }
 }
