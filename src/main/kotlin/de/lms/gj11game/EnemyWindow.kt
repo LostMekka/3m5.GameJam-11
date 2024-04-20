@@ -1,5 +1,6 @@
 package de.lms.gj11game
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -10,7 +11,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
-import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.window.WindowState
 import kotlinx.coroutines.delay
 
 @Composable
@@ -20,11 +21,6 @@ fun EnemyWindows(state: GameState) {
 
 @Composable
 fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
-    val windowState = rememberWindowState(
-        position = WindowPosition(state.position.x.dp, state.position.y.dp),
-        width = 400.dp,
-        height = 100.dp,
-    )
     val movement = remember { mutableStateOf(IntOffset.Zero) }
 
     val onClick = {
@@ -34,24 +30,30 @@ fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
 
     Window(
         onCloseRequest = onClick,
-        state = windowState,
+        state = WindowState(
+            position = WindowPosition((state.position.x - state.width / 2).dp, (state.position.y - state.height / 2).dp),
+            width = state.width.dp,
+            height = state.height.dp,
+        ),
         resizable = false,
         title = "Enemy ${state.hp} / ${state.maxHp}"
     ) {
-        LaunchedEffect(windowState) {
+        LaunchedEffect(state) {
             while (true) {
                 delay(100)
-                if (windowState.isMinimized) {
+                state.position = IntOffset(window.x + state.width / 2, window.y + state.height / 2)
+                if (window.isMinimized) {
                     onClick()
-                    windowState.isMinimized = false
+                    window.isMinimized = false
                 }
             }
         }
 
-        Button(
-            onClick = onClick
-        ) {
-            Text("Attack")
+        Row {
+            Button(onClick = onClick) {
+                Text("Attack")
+            }
+            Text(state.id.toString())
         }
     }
 }

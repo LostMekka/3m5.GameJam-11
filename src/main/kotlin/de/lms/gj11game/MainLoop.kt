@@ -13,9 +13,9 @@ suspend fun mainLoop(state: GameState) {
 
         if (state.enemies.size < 5 && Random.nextDouble() > 0.9) {
             state.enemies += EnemyState(
-                hp = 100,
-                x = Random.nextInt(100, 800),
-                y = Random.nextInt(100, 400),
+                hp = 10,
+                x = Random.nextInt(300, 1000),
+                y = Random.nextInt(300, 600),
             )
         }
     }
