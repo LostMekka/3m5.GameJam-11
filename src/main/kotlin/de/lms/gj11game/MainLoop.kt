@@ -53,7 +53,7 @@ private fun updateResourceScanning(state: GameState, dt: Float) {
 private fun handleDamage(state: GameState) {
     val playerOffset = state.player.position.let { Offset(it.x.toFloat(), it.y.toFloat()) }
     state.enemies.forEach {
-        if (it.position.distance(playerOffset) < (state.player.width + it.width) / 2) {
+        if (it.position.distance(playerOffset) < (state.player.height + state.player.width + it.height + it.width) / 4) {
             if (it.cooldown == 0) {
                 state.player.hp -= 1
                 it.cooldown = 10
