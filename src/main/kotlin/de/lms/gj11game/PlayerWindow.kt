@@ -23,6 +23,7 @@ fun PlayerWindow(state: PlayerState) {
         ),
         resizable = false,
         title = "Player",
+        alwaysOnTop = true,
     ) {
         LaunchedEffect(key1 = state) {
             while (true) {

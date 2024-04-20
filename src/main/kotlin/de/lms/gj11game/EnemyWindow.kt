@@ -48,6 +48,7 @@ fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
         ),
         resizable = false,
         title = "Enemy $health",
+        alwaysOnTop = true,
     ) {
         LaunchedEffect(state) {
             while (true) {
