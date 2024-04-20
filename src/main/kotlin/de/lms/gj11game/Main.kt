@@ -79,4 +79,5 @@ fun App() {
 fun main() = application {
     val state = remember { GameState() }
     MainWindow(state, this)
+    LaunchedEffect(key1 = this) { mainLoop(state) }
 }
