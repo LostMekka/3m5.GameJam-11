@@ -32,7 +32,7 @@ private fun updateResourceScanning(state: GameState, dt: Float) {
             state.resourceFields += ResourceFieldState(
                 x = Random.nextInt(300, 1000),
                 y = Random.nextInt(300, 600),
-                amount = 10 + Random.nextInt(20),
+                ResourceType.entries.random() * (10 + Random.nextInt(20)),
             )
             null
         } else newProgress

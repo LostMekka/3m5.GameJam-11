@@ -24,8 +24,9 @@ fun MainWindow(state: GameState, applicationScope: ApplicationScope) {
         CharacterInfoWindow(state.player)
         EnemyWindows(state)
         ResourceFieldWindows(state)
+
         Column {
-            Text("Score: ${state.score}")
+            for (type in ResourceType.entries) if (type in state.inventory) Text("$type: ${state.inventory[type]}")
 
             Button(
                 onClick = { state.player.statsWindowVisible = true },

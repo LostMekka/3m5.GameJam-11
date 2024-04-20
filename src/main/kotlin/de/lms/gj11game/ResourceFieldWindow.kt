@@ -26,7 +26,10 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
         state = WindowState(
             width = state.width.dp,
             height = state.height.dp,
-            position = WindowPosition((state.position.x - state.width / 2).dp, (state.position.y - state.height / 2).dp),
+            position = WindowPosition(
+                (state.position.x - state.width / 2).dp,
+                (state.position.y - state.height / 2).dp,
+            ),
         ),
         resizable = false,
         title = "Resource Field",
@@ -40,13 +43,17 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
         }
         Column {
             if (state.isRevealed) {
-                Text("Resources in deposit: ${state.amount}")
-                Button(onClick = {
-                    val n = min(gameState.player.resourceMiningSpeed, state.amount)
-                    gameState.score += n
-                    state.amount -= n
-                }) {
-                    Text("Mine resource")
+                for ((type, amount) in state.inventory) {
+                    Button(
+                        onClick = {
+                            val n = min(gameState.player.resourceMiningSpeed, amount)
+                            gameState.inventory[type] += n
+                            state.inventory[type] -= n
+                        },
+                        enabled = amount > 0,
+                    ) {
+                        Text("Mine $type ($amount)")
+                    }
                 }
             } else {
                 Text("Reveal progress: ${floor(state.revealProgress * 100)}%")
