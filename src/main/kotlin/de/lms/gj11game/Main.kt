@@ -1,3 +1,5 @@
+package de.lms.gj11game
+
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
