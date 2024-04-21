@@ -159,6 +159,6 @@ class AreaState(
 }
 
 class MovingState {
-    var selectorPosition by mutableStateOf(Rect.fromMidpoint(screenWidth / 2f, screenHeight / 2f, 150f, 150f))
+    var selectorPosition by mutableStateOf(Rect.fromMidpoint(screenWidth / 2f, screenHeight / 2f, 250f, 250f))
     var progress by mutableStateOf<Pair<AreaType, Float>?>(null)
 }

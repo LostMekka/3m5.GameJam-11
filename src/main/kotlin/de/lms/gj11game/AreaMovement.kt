@@ -68,7 +68,10 @@ fun AreaSelectionWindow(state: MovingState, gameState: GameState) {
                     continue
                 }
 
+                if (gameState.areas[area]?.unlocked != true) continue
+
                 var areaProgress = state.progress
+
 
                 if (areaProgress == null) {
                     state.progress = Pair(area, 0f)
