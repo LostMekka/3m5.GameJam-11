@@ -102,7 +102,7 @@ fun followPlayer(player: PlayerState, enemies: SnapshotStateList<EnemyState>) {
 fun flockEnemies(enemies: SnapshotStateList<EnemyState>) {
     enemies.forEach { enemy ->
         enemy.velocity +=
-            computeAlignment(enemy, enemies) + computeCohesion(enemy, enemies) + computeSeparation(enemy, enemies)
+            computeAlignment(enemy, enemies) + computeCohesion(enemy, enemies) + computeSeparation(enemy, enemies).times(1.2f)
         enemy.velocity = enemy.velocity.normalizeCap(enemy.speed)
     }
 }
@@ -148,8 +148,8 @@ fun computeSeparation(me: EnemyState, enemies: SnapshotStateList<EnemyState>): O
 
     var count = 0
     enemies.forEach { other ->
-        if (me != other && me.position.midOffset.distance(other.position.midOffset) < 150) {
-            v += other.position.midOffset
+        if (me != other && me.position.midOffset.distance(other.position.midOffset) < 120) {
+            v += other.position.offset
             count++
         }
     }
@@ -170,6 +170,6 @@ private fun Offset.normalizeCap(targetLength: Float = 1f): Offset {
 }
 
 private val Offset.length
-    get() = sqrt(x * x + y * y)
+    get() = this.getDistance()
 
 fun Offset.distance(other: Offset): Float = (this - other).length
