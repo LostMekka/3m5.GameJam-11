@@ -3,11 +3,20 @@ package de.lms.gj11game
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.*
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPosition
+import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 
 fun main() = application {
     val lostPreviously = remember { mutableStateOf(false) }
@@ -42,6 +51,13 @@ fun main() = application {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text(
+                fontSize = TextUnit(38f, TextUnitType.Sp),
+                textAlign = TextAlign.Center,
+                text = "Window Defenders",
+                fontWeight = FontWeight.Bold,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { state.value = GameState() }) {
                 Text(if (lostPreviously.value) "Restart" else "Start")
             }
