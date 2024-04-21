@@ -11,11 +11,23 @@ data class CraftingAction(
     val action: GameState.() -> Unit,
 )
 
+data class CraftingUpgrade(
+    val name: String,
+    val levels: List<CraftingUpgradeLevel>,
+)
+
+data class CraftingUpgradeLevel(
+    val nameSuffix: String,
+    val cost: Inventory,
+    val action: GameState.() -> Unit,
+)
+
 data class CraftingStation(
     val name: String,
     val cost: Inventory,
     val specialMechanic: CraftingStationSpecialMechanic? = null,
     val actions: List<CraftingAction> = emptyList(),
+    val upgrades: List<CraftingUpgrade> = emptyList(),
     val innerStations: List<CraftingStation> = emptyList(),
 )
 
