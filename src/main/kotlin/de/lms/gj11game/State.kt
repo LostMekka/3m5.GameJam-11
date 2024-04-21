@@ -85,11 +85,11 @@ class Inventory(vararg resources: ResourcePack): Iterable<Map.Entry<ResourceType
     operator fun minusAssign(other: Inventory) {
         for ((type, amount) in other) this[type] -= amount
     }
-    fun isEmpty() = stateMap.isEmpty()
-    fun isNotEmpty() = stateMap.isNotEmpty()
+    fun isEmpty() = stateMap.all { it.value <= 0 }
+    fun isNotEmpty() = stateMap.isNotEmpty() && stateMap.any { it.value > 0 }
     val size get() = stateMap.size
     fun toShortString() = if (isEmpty()) "free" else ResourceType.entries
-        .filter { it in this }
+        .filter { this[it] > 0 }
         .joinToString(separator = ",") { "$it:${this[it]}" }
 }
 
