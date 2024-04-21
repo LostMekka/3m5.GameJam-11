@@ -139,15 +139,55 @@ private val constructionGuildStation = CraftingStation(
     innerStations = listOf(
         CraftingStation(
             name = "Farm",
-            cost = Inventory(Wood * 200, Stone * 50, Bones * 100),
+            cost = Inventory(Wood * 200, Stone * 50, Bones * 50),
             specialMechanic = CraftingStationSpecialMechanic.ResourceGenerator { farm },
             homeArea = AreaType.Plains,
+            upgrades = listOf(
+                CraftingUpgrade(
+                    name = "Farming Speed",
+                    levels = listOf(
+                        CraftingUpgradeLevel(Inventory(Bones * 80)) { farm.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Bones * 150)) { farm.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Bones * 400)) { farm.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Bones * 1200)) { farm.generationSpeed *= 2f },
+                    ),
+                ),
+                CraftingUpgrade(
+                    name = "Stockpile",
+                    levels = listOf(
+                        CraftingUpgradeLevel(Inventory(Wood * 100)) { farm.maxAmount *= 3 },
+                        CraftingUpgradeLevel(Inventory(Wood * 200)) { farm.maxAmount *= 3 },
+                        CraftingUpgradeLevel(Inventory(Wood * 400)) { farm.maxAmount *= 3 },
+                        CraftingUpgradeLevel(Inventory(Wood * 800)) { farm.maxAmount *= 3 },
+                    ),
+                ),
+            ),
         ),
         CraftingStation(
             name = "Sawmill",
             cost = Inventory(Wood * 200, Stone * 200),
             specialMechanic = CraftingStationSpecialMechanic.ResourceGenerator { sawmill },
             homeArea = AreaType.Forest,
+            upgrades = listOf(
+                CraftingUpgrade(
+                    name = "Logging Speed",
+                    levels = listOf(
+                        CraftingUpgradeLevel(Inventory(Wood * 400, Stone * 200)) { sawmill.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Wood * 800, Stone * 200)) { sawmill.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Wood * 1600, Stone * 200)) { sawmill.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Wood * 3200, Stone * 200)) { sawmill.generationSpeed *= 2f },
+                    ),
+                ),
+                CraftingUpgrade(
+                    name = "Stockpile",
+                    levels = listOf(
+                        CraftingUpgradeLevel(Inventory(Stone * 200)) { sawmill.maxAmount *= 3 },
+                        CraftingUpgradeLevel(Inventory(Stone * 400)) { sawmill.maxAmount *= 3 },
+                        CraftingUpgradeLevel(Inventory(Stone * 800)) { sawmill.maxAmount *= 3 },
+                        CraftingUpgradeLevel(Inventory(Stone * 1600)) { sawmill.maxAmount *= 3 },
+                    ),
+                ),
+            ),
         ),
     ),
 )
