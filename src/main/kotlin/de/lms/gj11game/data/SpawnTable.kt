@@ -58,6 +58,18 @@ val spawnTable = mapOf(
             ),
         ),
     ),
+    AreaType.Mountains to SpawnInfo(
+        enemyLimit = 6,
+        enemies = listOf(
+            SpawnEnemyInfo(
+                hp = 30,
+                dropTable = listOf(
+                    LootTableEntry(ResourceType.Stone, 3, 6),
+                    LootTableEntry(ResourceType.Iron, 0, 1, 0.3),
+                )
+            )
+        )
+    )
 )
 
 data class SpawnInfo(
