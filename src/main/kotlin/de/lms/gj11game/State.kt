@@ -129,10 +129,7 @@ class Inventory(vararg resources: ResourcePack) : Iterable<Map.Entry<ResourceTyp
 
 class EnemyState(
     hp: Int,
-    x: Int,
-    y: Int,
-    width: Int = 90,
-    height: Int = 100,
+    rect: Rect,
     val dropInventory: Inventory = Inventory(),
     speed: Float? = null,
     evasion: Float? = null,
@@ -140,7 +137,7 @@ class EnemyState(
     val id: UUID = UUID.randomUUID()
     var hp by mutableStateOf(hp)
     val maxHp = hp
-    var position by mutableStateOf(Rect(x.toFloat(), y.toFloat(), width.toFloat(), height.toFloat()))
+    var position by mutableStateOf(rect)
     var velocity by mutableStateOf(Offset.Zero)
     var cooldown by mutableStateOf(10)
     val speed = speed ?: 4f

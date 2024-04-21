@@ -3,6 +3,7 @@ package de.lms.gj11game
 import de.lms.gj11game.data.resourceDepositDropTable
 import de.lms.gj11game.data.spawnTable
 import de.lms.gj11game.data.toInventory
+import de.lms.gj11game.helper.Rect
 import de.lms.gj11game.helper.playerInInteractionRange
 import kotlinx.coroutines.delay
 import kotlin.random.Random
@@ -57,8 +58,7 @@ private fun spawnEnemies(state: GameState) {
 
             state.enemies += EnemyState(
                 hp = enemyInfo.hp,
-                x = Random.nextInt(300, 1000),
-                y = Random.nextInt(300, 600),
+                rect = Rect.randomOnScreen(90f, 100f),
                 dropInventory = enemyInfo.dropTable.toInventory(state.player.enemyLootMultiplier),
                 evasion = enemyInfo.evasion,
                 speed = enemyInfo.speed,

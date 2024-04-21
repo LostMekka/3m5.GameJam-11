@@ -34,10 +34,10 @@ data class Rect(
     companion object {
         fun fromMidpoint(midX: Float, midY: Float, width: Float, height: Float) =
             Rect(midX - width / 2f, midY - height / 2f, width, height)
-        fun randomOnScreen(width: Float, height: Float) =
+        fun randomOnScreen(width: Float, height: Float, border: Float = 0f) =
             Rect(
-                Random.nextFloat() * (screenWidth - width),
-                Random.nextFloat() * (screenHeight - height),
+                randomWindowXPosition(width, border),
+                randomWindowYPosition(height, border),
                 width,
                 height,
             )
