@@ -47,12 +47,12 @@ class GameState {
     val craftingStation = CraftingStationState(globalStation)
     val firePit = FirePitState()
     val areas = mutableStateMapOf(
-        Pair(AreaType.Plains, AreaState(AreaType.Plains, 100f, 100f, unlocked = true)),
-        Pair(AreaType.Forest, AreaState(AreaType.Forest, 500f, 100f, unlocked = true)),
-        Pair(AreaType.Caves, AreaState(AreaType.Caves, 900f, 100f)),
-        Pair(AreaType.Hills, AreaState(AreaType.Hills, 100f, 500f)),
-        Pair(AreaType.Mountains, AreaState(AreaType.Mountains, 900f, 500f)),
-        Pair(AreaType.Dungeon, AreaState(AreaType.Dungeon, 100f, 900f)),
+        Pair(AreaType.Plains, AreaState(AreaType.Plains, Rect.randomOnScreen(200f, 200f), unlocked = true)),
+        Pair(AreaType.Forest, AreaState(AreaType.Forest, Rect.randomOnScreen(200f, 200f), unlocked = true)),
+        Pair(AreaType.Caves, AreaState(AreaType.Caves, Rect.randomOnScreen(200f, 200f))),
+        Pair(AreaType.Hills, AreaState(AreaType.Hills, Rect.randomOnScreen(200f, 200f))),
+        Pair(AreaType.Mountains, AreaState(AreaType.Mountains, Rect.randomOnScreen(200f, 200f))),
+        Pair(AreaType.Dungeon, AreaState(AreaType.Dungeon, Rect.randomOnScreen(200f, 200f))),
     )
     var moving by mutableStateOf<MovingState?>(null)
 }
@@ -160,11 +160,10 @@ class ResourceFieldState(
 
 class AreaState(
     val areaType: AreaType,
-    x: Float,
-    y: Float,
+    rect: Rect,
     unlocked: Boolean = false,
 ) {
-    var position by mutableStateOf(Rect(x, y, 200f, 200f))
+    var position by mutableStateOf(rect)
     var unlocked by mutableStateOf(unlocked)
 }
 
