@@ -50,8 +50,9 @@ class GameState {
     val resourceFields = mutableStateListOf<ResourceFieldState>()
     val craftingStation = CraftingStationState(globalStation)
     val firePit = FirePitState()
-    val farm = ResourceGeneratorState(ResourceType.Plants, 50, 0.25f)
-    val sawmill = ResourceGeneratorState(ResourceType.Wood, 50, 0.25f)
+    val farm = ResourceGeneratorState(ResourceType.Plants, 100, 0.5f)
+    val sawmill = ResourceGeneratorState(ResourceType.Wood, 100, 0.5f)
+    val quarry = ResourceGeneratorState(ResourceType.Stone, 100, 0.5f)
     val areas = mutableStateMapOf(
         Pair(AreaType.Plains, AreaState(AreaType.Plains, Rect.randomOnScreen(200f, 200f), unlocked = true)),
         Pair(AreaType.Forest, AreaState(AreaType.Forest, Rect.randomOnScreen(200f, 200f), unlocked = true)),

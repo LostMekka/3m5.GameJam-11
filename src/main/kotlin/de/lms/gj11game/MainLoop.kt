@@ -23,6 +23,7 @@ suspend fun mainLoop(state: GameState) {
         updateFirePit(state, dt)
         updateResourceGenerator(state.farm, dt)
         updateResourceGenerator(state.sawmill, dt)
+        updateResourceGenerator(state.quarry, dt)
     }
 }
 

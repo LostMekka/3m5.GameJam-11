@@ -155,10 +155,10 @@ private val constructionGuildStation = CraftingStation(
                 CraftingUpgrade(
                     name = "Stockpile",
                     levels = listOf(
-                        CraftingUpgradeLevel(Inventory(Wood * 100)) { farm.maxAmount *= 3 },
-                        CraftingUpgradeLevel(Inventory(Wood * 200)) { farm.maxAmount *= 3 },
-                        CraftingUpgradeLevel(Inventory(Wood * 400)) { farm.maxAmount *= 3 },
-                        CraftingUpgradeLevel(Inventory(Wood * 800)) { farm.maxAmount *= 3 },
+                        CraftingUpgradeLevel(Inventory(Wood * 100)) { farm.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Wood * 200)) { farm.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Wood * 400)) { farm.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Wood * 800)) { farm.maxAmount *= 4 },
                     ),
                 ),
             ),
@@ -181,10 +181,36 @@ private val constructionGuildStation = CraftingStation(
                 CraftingUpgrade(
                     name = "Stockpile",
                     levels = listOf(
-                        CraftingUpgradeLevel(Inventory(Stone * 200)) { sawmill.maxAmount *= 3 },
-                        CraftingUpgradeLevel(Inventory(Stone * 400)) { sawmill.maxAmount *= 3 },
-                        CraftingUpgradeLevel(Inventory(Stone * 800)) { sawmill.maxAmount *= 3 },
-                        CraftingUpgradeLevel(Inventory(Stone * 1600)) { sawmill.maxAmount *= 3 },
+                        CraftingUpgradeLevel(Inventory(Stone * 200)) { sawmill.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Stone * 400)) { sawmill.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Stone * 800)) { sawmill.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Stone * 1600)) { sawmill.maxAmount *= 4 },
+                    ),
+                ),
+            ),
+        ),
+        CraftingStation(
+            name = "Quarry",
+            cost = Inventory(Wood * 200, Stone * 200, Plants * 500),
+            specialMechanic = CraftingStationSpecialMechanic.ResourceGenerator { quarry },
+            homeArea = AreaType.Mountains,
+            upgrades = listOf(
+                CraftingUpgrade(
+                    name = "Mining Speed",
+                    levels = listOf(
+                        CraftingUpgradeLevel(Inventory(Wood * 400, Stone * 200)) { quarry.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Wood * 800, Stone * 200)) { quarry.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Wood * 1600, Stone * 200)) { quarry.generationSpeed *= 2f },
+                        CraftingUpgradeLevel(Inventory(Wood * 3200, Stone * 200)) { quarry.generationSpeed *= 2f },
+                    ),
+                ),
+                CraftingUpgrade(
+                    name = "Stockpile",
+                    levels = listOf(
+                        CraftingUpgradeLevel(Inventory(Wood * 200)) { quarry.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Wood * 400)) { quarry.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Wood * 800)) { quarry.maxAmount *= 4 },
+                        CraftingUpgradeLevel(Inventory(Wood * 1600)) { quarry.maxAmount *= 4 },
                     ),
                 ),
             ),
