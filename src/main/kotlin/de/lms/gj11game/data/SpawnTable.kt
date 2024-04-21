@@ -66,7 +66,7 @@ val spawnTable = mapOf(
                 dropTable = listOf(
                     LootTableEntry(ResourceType.Stone, 3, 6),
                     LootTableEntry(ResourceType.Iron, 0, 1, 0.3),
-                )
+                ),
             )
         )
     )

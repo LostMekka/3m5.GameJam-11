@@ -1,9 +1,6 @@
 package de.lms.gj11game
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -12,15 +9,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowState
+import androidx.compose.ui.window.rememberWindowState
 import kotlin.math.floor
 
 
 @Composable
-fun MainWindow(state: GameState, applicationScope: ApplicationScope) {
+fun MainWindow(
+    state: GameState,
+    applicationScope: ApplicationScope,
+    onGameOver: () -> Unit,
+) {
+    if (state.player.hp <= 0) {
+        onGameOver()
+        return
+    }
+
+
     Window(
         onCloseRequest = applicationScope::exitApplication,
-        state = WindowState(
+        state = rememberWindowState(
             width = 500.dp,
             height = 300.dp,
         ),
