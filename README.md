@@ -4,7 +4,7 @@ The game. Also runs on Mac. (probably)
 This is a clicker RPG with crafting elements, built with Compose for Desktop.
 It is our cursed entry for the 3m5.GameJam#11 event.
 
-![screenshot](doc\game-screenshot-01.png)
+![screenshot](doc/game-screenshot-01.png)
 
 ## How to play
 You control the player window by moving it around the screen.
