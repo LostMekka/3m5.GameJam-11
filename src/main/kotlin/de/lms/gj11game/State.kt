@@ -60,18 +60,14 @@ class FirePitState {
     var fuelBurnRate by mutableStateOf(0.05f)
 }
 
-enum class ActionButtonState { Hidden, Visible, Unlocked }
-
-class CraftingStationState(val station: CraftingStation, state: ActionButtonState = ActionButtonState.Hidden) {
-    var state by mutableStateOf(state)
+class CraftingStationState(val station: CraftingStation, unlocked: Boolean = false) {
+    var unlocked by mutableStateOf(unlocked)
     var position by mutableStateOf(Rect.randomOnScreen(400f, 400f))
     val actions = station.actions.map { CraftingActionState(it) }
     val innerStations = station.innerStations.map { CraftingStationState(it) }
 }
 
-class CraftingActionState(val action: CraftingAction, visible: Boolean = false) {
-    var visible by mutableStateOf(visible)
-}
+class CraftingActionState(val action: CraftingAction)
 
 class Inventory(vararg resources: ResourcePack): Iterable<Map.Entry<ResourceType, Int>> {
     private val stateMap = mutableStateMapOf<ResourceType, Int>().also {

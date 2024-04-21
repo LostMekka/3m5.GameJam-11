@@ -5,7 +5,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
@@ -40,7 +39,7 @@ fun CraftingStationView(stationState: CraftingStationState, gameState: GameState
 
 @Composable
 fun CraftingActionView(actionState: CraftingActionState, gameState: GameState, disableAll: Boolean) {
-    if (actionState.visible) Button(
+    Button(
         onClick = {
             gameState.inventory -= actionState.action.cost
             actionState.action.action(gameState)
@@ -53,7 +52,7 @@ fun CraftingActionView(actionState: CraftingActionState, gameState: GameState, d
 
 @Composable
 fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: GameState, disableAll: Boolean = false) {
-    if (stationState.state == ActionButtonState.Unlocked) {
+    if (stationState.unlocked) {
         Window(
             onCloseRequest = {},
             state = WindowState(
@@ -67,20 +66,17 @@ fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: Gam
                 while (true) {
                     delay(100)
                     stationState.position = stationState.position.withPosition(window.x.toFloat(), window.y.toFloat())
-                    if (window.isMinimized) {
-                        window.toolkit.beep()
-                        window.isMinimized = false
-                    }
+                    if (window.isMinimized) window.isMinimized = false
                 }
             }
             val inRange = gameState.playerInInteractionRange(stationState.position)
             CraftingStationView(stationState, gameState, inRange)
         }
     } else {
-        if (stationState.state == ActionButtonState.Visible) Button(
+        Button(
             onClick = {
                 gameState.inventory -= stationState.station.cost
-                stationState.state = ActionButtonState.Unlocked
+                stationState.unlocked = true
             },
             enabled = !disableAll && stationState.station.cost in gameState.inventory,
         ) {

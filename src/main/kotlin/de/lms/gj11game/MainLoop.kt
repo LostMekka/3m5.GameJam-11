@@ -17,7 +17,6 @@ suspend fun mainLoop(state: GameState) {
         moveEnemies(state)
         handleDamage(state)
         updateResourceScanning(state, dt)
-        updateCraftingVisibility(state.craftingStation, state)
         updateFirePit(state, dt)
     }
 }
@@ -26,16 +25,6 @@ suspend fun mainLoop(state: GameState) {
 private fun updateFirePit(state: GameState, dt: Float) {
     state.firePit.fuelAmount -= state.firePit.fuelBurnRate * dt
     if (state.firePit.fuelAmount < 0f) state.firePit.fuelAmount = 0f
-}
-
-fun updateCraftingVisibility(stationState: CraftingStationState, gameState: GameState) {
-    val canUnlock = stationState.station.cost in gameState.inventory
-    if (stationState.state == ActionButtonState.Hidden && canUnlock) stationState.state = ActionButtonState.Visible
-    for (actionState in stationState.actions) {
-        val canPerform = actionState.action.cost in gameState.inventory
-        if (!actionState.visible && canPerform) actionState.visible = true
-    }
-    for (innerStationState in stationState.innerStations) updateCraftingVisibility(innerStationState, gameState)
 }
 
 private fun spawnEnemies(state: GameState) {
