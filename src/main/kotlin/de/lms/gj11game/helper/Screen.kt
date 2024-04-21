@@ -12,24 +12,24 @@ val screenSize: Dimension by lazy { Toolkit.getDefaultToolkit().screenSize }
 val screenWidth by lazy { screenSize.width }
 val screenHeight by lazy { screenSize.height }
 
-fun randomlyPositionedWindowState(windowWidth: Int, windowHeight: Int) =
+fun randomlyPositionedWindowState(windowWidth: Float, windowHeight: Float) =
     WindowState(
         width = windowWidth.dp,
         height = windowHeight.dp,
         position = randomScreenPosition(windowWidth, windowHeight),
     )
 
-fun randomScreenPosition(windowWidth: Int, windowHeight: Int) =
+fun randomScreenPosition(windowWidth: Float, windowHeight: Float) =
     WindowPosition(
         randomWindowXPosition(windowWidth).dp,
         randomWindowYPosition(windowHeight).dp,
     )
 
-fun randomScreenPositionOffset(windowWidth: Int, windowHeight: Int) =
+fun randomScreenPositionOffset(windowWidth: Float, windowHeight: Float) =
     Offset(
         randomWindowXPosition(windowWidth),
         randomWindowYPosition(windowHeight),
     )
 
-fun randomWindowYPosition(windowHeight: Int) = Random.nextFloat() * (screenHeight - windowHeight) + windowHeight / 2f
-fun randomWindowXPosition(windowWidth: Int) = Random.nextFloat() * (screenWidth - windowWidth) + windowWidth / 2f
+fun randomWindowXPosition(windowWidth: Float) = Random.nextFloat() * (screenWidth - windowWidth) + windowWidth / 2f
+fun randomWindowYPosition(windowHeight: Float) = Random.nextFloat() * (screenHeight - windowHeight) + windowHeight / 2f

@@ -14,7 +14,7 @@ import kotlinx.coroutines.delay
 fun ResourceInventoryWindow(state: GameState) {
     Window(
         onCloseRequest = {},
-        state = remember { randomlyPositionedWindowState(300, 500) },
+        state = remember { randomlyPositionedWindowState(300f, 500f) },
         resizable = false,
         title = "Collected Resources",
     ) {

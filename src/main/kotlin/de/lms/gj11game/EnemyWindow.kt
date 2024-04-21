@@ -47,12 +47,9 @@ fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
     Window(
         onCloseRequest = onClick,
         state = WindowState(
-            position = WindowPosition(
-                (state.position.x - state.width / 2).dp,
-                (state.position.y - state.height / 2).dp,
-            ),
-            width = state.width.dp,
-            height = state.height.dp,
+            position = WindowPosition(state.position.x.dp, state.position.y.dp),
+            width = state.position.width.dp,
+            height = state.position.height.dp,
         ),
         resizable = false,
         title = "Enemy $health",
@@ -91,14 +88,14 @@ fun moveEnemies(state: GameState) {
     )
     flockEnemies(state.enemies)
     state.enemies.forEach { enemy ->
-        enemy.position += Offset(enemy.velocity.x, enemy.velocity.y)
+        enemy.position = enemy.position.translated(enemy.velocity)
     }
 }
 
 
 fun followPlayer(player: PlayerState, enemies: SnapshotStateList<EnemyState>) {
     enemies.forEach { enemy ->
-        enemy.velocity += (Offset(player.position.x.toFloat(), player.position.y.toFloat()) - enemy.position)
+        enemy.velocity += (player.position.midOffset - enemy.position.midOffset)
             .normalize(2f)
         enemy.velocity = enemy.velocity.normalizeCap(enemy.speed)
     }
@@ -116,7 +113,7 @@ fun computeAlignment(me: EnemyState, enemies: SnapshotStateList<EnemyState>): Of
     var v = Offset.Zero
     var count = 0
     enemies.forEach { other ->
-        if (me != other && me.position.distance(other.position) < 150) {
+        if (me != other && me.position.midOffset.distance(other.position.midOffset) < 150) {
             v += Offset(other.velocity.x, other.velocity.y)
             count++
         }
@@ -132,9 +129,10 @@ fun computeCohesion(me: EnemyState, enemies: SnapshotStateList<EnemyState>): Off
 
     var count = 0
     enemies.forEach { other ->
-        if (me != other && me.position.distance(other.position) < 150) {
-            val diff = other.position - me.position
-            v += Offset(diff.x.toFloat(), diff.y.toFloat())
+        val meMid = me.position.midOffset
+        val otherMid = other.position.midOffset
+        if (me != other && meMid.distance(otherMid) < 150) {
+            v += otherMid - meMid
             count++
         }
     }
@@ -152,8 +150,8 @@ fun computeSeparation(me: EnemyState, enemies: SnapshotStateList<EnemyState>): O
 
     var count = 0
     enemies.forEach { other ->
-        if (me != other && me.position.distance(other.position) < 150) {
-            v += Offset(other.position.x.toFloat(), other.position.y.toFloat())
+        if (me != other && me.position.midOffset.distance(other.position.midOffset) < 150) {
+            v += other.position.midOffset
             count++
         }
     }

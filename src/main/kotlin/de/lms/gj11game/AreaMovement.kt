@@ -10,13 +10,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
+import de.lms.gj11game.helper.Rect
 import kotlinx.coroutines.delay
 
 @Composable
@@ -35,8 +34,8 @@ fun AreaWindow(area: AreaState, currentArea: AreaType) {
         onCloseRequest = {},
         enabled = area.areaType != currentArea,
         state = WindowState(
-            width = area.size.width.dp,
-            height = area.size.height.dp,
+            width = area.position.width.dp,
+            height = area.position.height.dp,
             position = WindowPosition(area.position.x.dp, area.position.y.dp),
         ),
     ) {
@@ -51,21 +50,19 @@ fun AreaSelectionWindow(state: MovingState, gameState: GameState) {
     Window(
         onCloseRequest = close,
         state = WindowState(
-            position = WindowPosition.Aligned(Alignment.Center),
-            width = state.selectorSize.width.dp,
-            height = state.selectorSize.width.dp,
+            position = WindowPosition(state.selectorPosition.x.dp, state.selectorPosition.y.dp),
+            width = state.selectorPosition.width.dp,
+            height = state.selectorPosition.width.dp,
         ),
     ) {
         LaunchedEffect(gameState) {
-            state.selectorPosition = Offset(window.x.toFloat(), window.y.toFloat())
-
             while (true) {
                 delay(100)
                 if (window.isMinimized) close()
 
-                state.selectorPosition = Offset(window.x.toFloat(), window.y.toFloat())
+                state.selectorPosition = state.selectorPosition.withPosition(window.x.toFloat(), window.y.toFloat())
 
-                val area = overlappingArea(gameState.areas, state.selectorRect)
+                val area = overlappingArea(gameState.areas, state.selectorPosition)
                 if (area == null || gameState.currentArea == area) {
                     state.progress = null
                     continue
@@ -106,8 +103,8 @@ fun AreaSelectionWindow(state: MovingState, gameState: GameState) {
             CircularProgressIndicator(
                 progress = state.progress?.second ?: 0f,
                 modifier = Modifier
-                    .width((state.selectorSize.width - 40).dp)
-                    .height((state.selectorSize.height - 40).dp),
+                    .width((state.selectorPosition.width - 40).dp)
+                    .height((state.selectorPosition.height - 40).dp),
             )
         }
 
@@ -128,9 +125,7 @@ fun AreaSelectionWindow(state: MovingState, gameState: GameState) {
 }
 
 private fun overlappingArea(areas: SnapshotStateMap<AreaType, AreaState>, movingRect: Rect): AreaType? {
-    areas.forEach {
-        if (movingRect.overlaps(it.value.rect)) return it.key
-    }
-    return null
+    return areas.entries
+        .find { movingRect.squaredDistanceTo(it.value.position) <= 0f }
+        ?.key
 }
-

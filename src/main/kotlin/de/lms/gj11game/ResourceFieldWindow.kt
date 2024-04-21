@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
+import de.lms.gj11game.helper.playerInInteractionRange
 import kotlinx.coroutines.delay
 import kotlin.math.floor
 import kotlin.math.max
@@ -26,12 +27,9 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
     Window(
         onCloseRequest = { gameState.resourceFields -= state },
         state = WindowState(
-            width = state.width.dp,
-            height = state.height.dp,
-            position = WindowPosition(
-                (state.position.x - state.width / 2).dp,
-                (state.position.y - state.height / 2).dp,
-            ),
+            width = state.position.width.dp,
+            height = state.position.height.dp,
+            position = WindowPosition(state.position.x.dp, state.position.y.dp),
         ),
         resizable = false,
         title = "Resource Field",
@@ -39,7 +37,7 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
         LaunchedEffect(key1 = state) {
             while (true) {
                 delay(100)
-                state.position = Offset(window.x + state.width / 2f, window.y + state.height / 2f)
+                state.position = state.position.withPosition(window.x.toFloat(), window.y.toFloat())
                 if (window.isMinimized) gameState.resourceFields -= state
 
                 if (state.isRevealed && !state.isCollapsed && !window.isActive)
@@ -51,27 +49,36 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
         }
         Column {
             if (state.isCollapsed) {
-                Text("Collapsed")
-            } else if (state.isRevealed) {
-                if (state.inventory.isEmpty()) Text("no resources found")
-                for ((type, amount) in state.inventory) {
-                    Button(
-                        onClick = {
-                            val n = min(gameState.player.resourceMiningSpeed, amount)
-                            gameState.inventory[type] += n
-                            state.inventory[type] -= n
-                        },
-                        enabled = amount > 0,
-                    ) {
-                        Text("Mine $type ($amount)")
-                    }
-                }
-
-                Text("Stability: ${floor(state.stability * 1000) / 10}%")
+                Text("Collapsed!")
             } else {
-                Text("Reveal progress: ${floor(state.revealProgress * 100)}%")
-                Button(onClick = { state.revealProgress += gameState.player.resourceRevealSpeed }) {
-                    Text("Dig")
+                val inRange = gameState.playerInInteractionRange(state.position)
+                if (!inRange) Text("out of range!")
+
+                if (state.isRevealed) {
+                    if (state.inventory.isEmpty()) Text("no resources found")
+
+                    for ((type, amount) in state.inventory) {
+                        Button(
+                            onClick = {
+                                val n = min(gameState.player.resourceMiningSpeed, amount)
+                                gameState.inventory[type] += n
+                                state.inventory[type] -= n
+                            },
+                            enabled = inRange && amount > 0,
+                        ) {
+                            Text("Mine $type ($amount)")
+                        }
+                    }
+
+                    Text("Stability: ${floor(state.stability * 1000) / 10}%")
+                } else {
+                    Text("Reveal progress: ${floor(state.revealProgress * 100)}%")
+                    Button(
+                        onClick = { state.revealProgress += gameState.player.resourceRevealSpeed },
+                        enabled = inRange,
+                    ) {
+                        Text("Dig")
+                    }
                 }
             }
         }

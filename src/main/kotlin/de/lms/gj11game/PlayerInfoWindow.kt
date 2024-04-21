@@ -18,9 +18,9 @@ fun PlayerInfoWindow(state: PlayerState) {
     Window(
         onCloseRequest = { state.statsWindowVisible = false },
         state = WindowState(
-            width = state.infoWidth.dp,
-            height = state.infoHeight.dp,
-            position = WindowPosition((state.infoPosition.x - state.infoWidth / 2).dp, (state.infoPosition.y - state.infoHeight / 2).dp),
+            width = state.infoPosition.width.dp,
+            height = state.infoPosition.height.dp,
+            position = WindowPosition(state.infoPosition.x.dp, state.infoPosition.y.dp),
         ),
         resizable = false,
         title = "Character Information",
@@ -28,7 +28,7 @@ fun PlayerInfoWindow(state: PlayerState) {
         LaunchedEffect(key1 = state) {
             while (true) {
                 delay(100)
-                state.infoPosition = Offset(window.x + state.infoWidth / 2f, window.y + state.infoHeight / 2f)
+                state.infoPosition = state.infoPosition.withPosition(window.x.toFloat(), window.y.toFloat())
                 if (window.isMinimized) {
                     state.statsWindowVisible = false
                 }

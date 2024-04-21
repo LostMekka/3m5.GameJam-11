@@ -11,24 +11,26 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import de.lms.gj11game.data.CraftingStationSpecialMechanic
+import de.lms.gj11game.helper.playerInInteractionRange
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @Composable
-fun CraftingStationView(stationState: CraftingStationState, gameState: GameState) {
+fun CraftingStationView(stationState: CraftingStationState, gameState: GameState, playerIsInRange: Boolean) {
     Column {
-        var disableAll = false
+        var disableAll = !playerIsInRange
         if (stationState.station.specialMechanic == CraftingStationSpecialMechanic.FirePit) {
             disableAll = gameState.firePit.fuelAmount <= 0
             Text("Fuel: ${(gameState.firePit.fuelAmount * 100).roundToInt()}%")
             Button(
                 onClick = { gameState.firePit.fuelAmount += 1f },
-                enabled = gameState.firePit.fuelAmount < 5f,
+                enabled = playerIsInRange && gameState.firePit.fuelAmount < 5f,
             ) {
                 Text("Refuel (Wood:1)")
             }
         }
 
+        if (!playerIsInRange) Text("out of range!")
         for (actionState in stationState.actions) CraftingActionView(actionState, gameState, disableAll)
         for (innerStation in stationState.innerStations) {
             CraftingStationUnlockView(innerStation, gameState, disableAll)
@@ -55,27 +57,24 @@ fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: Gam
         Window(
             onCloseRequest = {},
             state = WindowState(
-                width = stationState.width.dp,
-                height = stationState.height.dp,
-                position = WindowPosition(
-                    (stationState.position.x - stationState.width / 2).dp,
-                    (stationState.position.y - stationState.height / 2).dp
-                ),
+                width = stationState.position.width.dp,
+                height = stationState.position.height.dp,
+                position = WindowPosition(stationState.position.x.dp, stationState.position.y.dp),
             ),
             title = stationState.station.name,
         ) {
             LaunchedEffect(key1 = stationState) {
                 while (true) {
                     delay(100)
-                    stationState.position =
-                        Offset(window.x + stationState.width / 2f, window.y + stationState.height / 2f)
+                    stationState.position = stationState.position.withPosition(window.x.toFloat(), window.y.toFloat())
                     if (window.isMinimized) {
                         window.toolkit.beep()
                         window.isMinimized = false
                     }
                 }
             }
-            CraftingStationView(stationState, gameState)
+            val inRange = gameState.playerInInteractionRange(stationState.position)
+            CraftingStationView(stationState, gameState, inRange)
         }
     } else {
         if (stationState.state == ActionButtonState.Visible) Button(
