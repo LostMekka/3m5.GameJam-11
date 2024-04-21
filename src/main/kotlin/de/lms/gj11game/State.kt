@@ -154,8 +154,8 @@ class PlayerState {
 class ResourceFieldState(
     width: Float = 300f,
     height: Float = 300f,
-    x: Float = randomWindowXPosition(width),
-    y: Float = randomWindowYPosition(height),
+    x: Float = randomWindowMidXPosition(width),
+    y: Float = randomWindowMidYPosition(height),
     val inventory: Inventory,
     spawnsRevealed: Boolean = false,
 ) {
