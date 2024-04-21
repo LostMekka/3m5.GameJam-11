@@ -59,15 +59,16 @@ private fun spawnEnemies(state: GameState) {
 
 @Suppress("SameParameterValue")
 private fun updateResourceScanning(state: GameState, dt: Float) {
-    state.resourceScanningProgress = state.resourceScanningProgress?.let {
-        val newProgress = it + state.player.resourceScanningSpeed * dt
-        if (newProgress >= 1) {
-            val multiplier = state.areas[state.currentArea]?.resourceMultiplier ?: 1f
-            state.resourceFields += ResourceFieldState(
-                inventory = resourceDepositDropTable[state.currentArea].toInventory(multiplier),
-            )
-            null
-        } else newProgress
+    if (state.resourceScanningStacks <= 0) return
+    val newProgress = state.resourceScanningProgress + state.player.resourceScanningSpeed * dt
+    if (newProgress >= 1) {
+        val multiplier = state.areas[state.currentArea]?.resourceMultiplier ?: 1f
+        val inventory = resourceDepositDropTable[state.currentArea].toInventory(multiplier)
+        state.resourceFields += ResourceFieldState(inventory = inventory)
+        state.resourceScanningProgress = if (state.resourceScanningStacks > 1) newProgress - 1f else 0f
+        state.resourceScanningStacks--
+    } else {
+        state.resourceScanningProgress = newProgress
     }
 }
 

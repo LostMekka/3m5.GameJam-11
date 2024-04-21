@@ -40,7 +40,8 @@ operator fun ResourceType.times(amount: Int) = ResourcePack(this, amount)
 
 class GameState {
     var currentArea by mutableStateOf(AreaType.Plains)
-    var resourceScanningProgress by mutableStateOf<Float?>(null)
+    var resourceScanningProgress by mutableStateOf(0f)
+    var resourceScanningStacks by mutableStateOf(0)
     val inventory = Inventory()
     val player = PlayerState()
     val enemies = mutableStateListOf<EnemyState>()

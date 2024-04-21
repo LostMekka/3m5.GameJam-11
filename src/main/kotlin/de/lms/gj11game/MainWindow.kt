@@ -44,14 +44,15 @@ fun MainWindow(state: GameState, applicationScope: ApplicationScope) {
             }
 
             val progress = state.resourceScanningProgress
+            val stacks = state.resourceScanningStacks
             Button(
-                onClick = { state.resourceScanningProgress = 0f },
-                enabled = progress == null,
+                onClick = { state.resourceScanningStacks++ },
+                enabled = stacks < state.player.resourceScanningStacks,
             ) {
-                if (progress == null) {
+                if (stacks == 0) {
                     Text("Scan for resource deposit")
                 } else {
-                    Text("Scanning for resource deposit... (${floor(progress * 100)}%)")
+                    Text("Scanning for resource deposit... (${floor(progress * 100)}%,$stacks/${state.player.resourceScanningStacks})")
                 }
             }
 
