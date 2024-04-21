@@ -52,7 +52,7 @@ private fun updateResourceGenerator(state: ResourceGeneratorState, dt: Float) {
 
 private fun spawnEnemies(state: GameState) {
     spawnTable[state.currentArea]?.also { spawnInfo ->
-        if (state.enemies.size < spawnInfo.enemyLimit && Random.nextDouble() > 0.9) {
+        if (state.enemies.size < spawnInfo.enemyLimit && Random.nextDouble() > 0.93) {
             val which = Random.nextInt(spawnInfo.enemies.size)
             val enemyInfo = spawnInfo.enemies[which]
 
