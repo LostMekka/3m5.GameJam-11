@@ -113,7 +113,7 @@ fun UpgradeActionView(upgradeState: CraftingUpgradeState, gameState: GameState, 
             },
             enabled = !disableAll && level.cost in gameState.inventory,
         ) {
-            Text("${upgradeState.upgrade.name} LVL${upgradeState.currentIndex + 2} (${level.cost.toShortString()})")
+            Text("${upgradeState.upgrade.name} LVL${upgradeState.currentIndex + 1} (${level.cost.toShortString()})")
         }
     }
 }
