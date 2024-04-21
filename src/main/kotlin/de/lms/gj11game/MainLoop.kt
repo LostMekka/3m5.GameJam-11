@@ -88,7 +88,7 @@ private fun handleDamage(state: GameState) {
         if (it.position.squaredDistanceTo(playerOffset) <= 0f) {
             if (it.cooldown == 0) {
                 state.player.hp -= 1
-                it.cooldown = 10
+                it.cooldown = 6 // TODO: maybe time instead of frames?
             } else {
                 it.cooldown--
             }
