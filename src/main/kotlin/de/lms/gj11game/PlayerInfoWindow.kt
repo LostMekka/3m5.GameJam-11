@@ -37,6 +37,12 @@ fun PlayerInfoWindow(state: PlayerState) {
         Column {
             Text("HP: ${state.hp}")
             Text("Base damage: ${state.baseDamage}")
+            Text("Resource scanning speed: ${state.resourceScanningSpeed}")
+            Text("Resource scanning stacks: ${state.resourceScanningStacks}")
+            Text("Resource reveal speed: ${state.resourceRevealSpeed}")
+            Text("Resource looting amount: ${state.resourceLootingAmount}")
+            Text("Enemy loot multiplier: ${state.enemyLootMultiplier}")
+            Text("Interaction range: ${state.interactionRange}")
         }
     }
 }
