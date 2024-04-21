@@ -136,6 +136,6 @@ fun AreaSelectionWindow(state: MovingState, gameState: GameState) {
 
 private fun overlappingArea(areas: SnapshotStateMap<AreaType, AreaState>, movingRect: Rect): AreaType? {
     return areas.entries
-        .find { movingRect.squaredDistanceTo(it.value.position) <= 0f }
+        .find { it.value.unlocked && movingRect.squaredDistanceTo(it.value.position) <= 0f }
         ?.key
 }
