@@ -10,15 +10,14 @@ val spawnTable = mapOf(
             SpawnEnemyInfo(
                 hp = 10,
                 dropTable = listOf(
-                    LootTableEntry(ResourceType.Meat, 0, 3),
-                    LootTableEntry(ResourceType.Bones, 0, 3),
+                    LootTableEntry(ResourceType.Meat, 1, 3),
+                    LootTableEntry(ResourceType.Bones, 1, 3),
                 ),
             ),
             SpawnEnemyInfo(
-                hp = 10,
+                hp = 8,
                 dropTable = listOf(
-                    LootTableEntry(ResourceType.Meat, 0, 3),
-                    LootTableEntry(ResourceType.Bones, 0, 2),
+                    LootTableEntry(ResourceType.Bones, 3, 6),
                 ),
                 speed = 4.5f,
             ),
@@ -30,8 +29,8 @@ val spawnTable = mapOf(
             SpawnEnemyInfo(
                 hp = 15,
                 dropTable = listOf(
-                    LootTableEntry(ResourceType.Meat, 0, 5),
-                    LootTableEntry(ResourceType.Bones, 0, 3),
+                    LootTableEntry(ResourceType.Meat, 1, 5),
+                    LootTableEntry(ResourceType.Bones, 1, 3),
                 ),
             ),
             SpawnEnemyInfo(
@@ -49,9 +48,9 @@ val spawnTable = mapOf(
             SpawnEnemyInfo(
                 hp = 5,
                 dropTable = listOf(
-                    LootTableEntry(ResourceType.Meat, 0, 1),
-                    LootTableEntry(ResourceType.Bones, 0, 1),
-                    LootTableEntry(ResourceType.Stone, 0, 1, 0.3),
+                    LootTableEntry(ResourceType.Meat, 0, 3),
+                    LootTableEntry(ResourceType.Bones, 1, 3),
+                    LootTableEntry(ResourceType.Stone, 2, 3, 0.3),
                 ),
                 speed = 5f,
                 evasion = 0.4f,
