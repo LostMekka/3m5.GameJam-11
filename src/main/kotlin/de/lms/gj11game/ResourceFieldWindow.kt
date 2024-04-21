@@ -12,6 +12,7 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import kotlinx.coroutines.delay
 import kotlin.math.floor
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -41,19 +42,16 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
                 state.position = Offset(window.x + state.width / 2f, window.y + state.height / 2f)
                 if (window.isMinimized) gameState.resourceFields -= state
 
-                if (state.isRevealed && !state.isCollapsed && !window.isActive) state.stability -= 0.001f
+                if (state.isRevealed && !state.isCollapsed && !window.isActive)
+                    state.stability = max(0f, state.stability - 0.025f)
 
-                if (state.stability < 0.95) {
-                    val chance = 1 - state.stability
-                    if (Random.nextFloat() < chance * chance * chance) {
-                        state.isCollapsed = true
-                    }
-                }
+                if (state.stability <= 0 && Random.nextFloat() < 0.05)
+                    state.isCollapsed = true
             }
         }
         Column {
             if (state.isCollapsed) {
-                Text("Collapsed ${state.stability}")
+                Text("Collapsed")
             } else if (state.isRevealed) {
                 if (state.inventory.isEmpty()) Text("no resources found")
                 for ((type, amount) in state.inventory) {

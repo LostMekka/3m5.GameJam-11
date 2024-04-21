@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.IntOffset
 import de.lms.gj11game.data.CraftingAction
 import de.lms.gj11game.data.CraftingStation
@@ -12,8 +13,8 @@ import de.lms.gj11game.data.globalStation
 import de.lms.gj11game.helper.randomScreenPositionOffset
 import de.lms.gj11game.helper.randomWindowXPosition
 import de.lms.gj11game.helper.randomWindowYPosition
+import androidx.compose.ui.unit.IntSize
 import java.util.*
-import kotlin.random.Random
 
 enum class AreaType {
     Plains,
@@ -48,6 +49,15 @@ class GameState {
     val resourceFields = mutableStateListOf<ResourceFieldState>()
     val craftingStation = CraftingStationState(globalStation)
     val firePit = FirePitState()
+    val areas = mutableStateMapOf(
+        Pair(AreaType.Plains, AreaState(AreaType.Plains, 100f, 100f, unlocked = true)),
+        Pair(AreaType.Forest, AreaState(AreaType.Forest, 500f, 100f, unlocked = true)),
+        Pair(AreaType.Caves, AreaState(AreaType.Caves, 900f, 100f)),
+        Pair(AreaType.Hills, AreaState(AreaType.Hills, 100f, 500f)),
+        Pair(AreaType.Mountains, AreaState(AreaType.Mountains, 900f, 500f)),
+        Pair(AreaType.Dungeon, AreaState(AreaType.Dungeon, 100f, 900f)),
+    )
+    var moving by mutableStateOf<MovingState?>(null)
 }
 
 class FirePitState {
@@ -142,12 +152,40 @@ class ResourceFieldState(
     val id: UUID = UUID.randomUUID()
     var revealProgress by mutableStateOf(if (spawnsRevealed) 1f else 0f)
     val isRevealed get() = revealProgress >= 1f
+    var stability by mutableStateOf(1f)
     var isCollapsed by mutableStateOf(false)
     var width by mutableStateOf(width)
     var height by mutableStateOf(height)
     var position by mutableStateOf(Offset(x, y))
-    var stability by mutableStateOf(1f)
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is ResourceFieldState && other.id == id
 }
+
+class AreaState(
+    val areaType: AreaType,
+    x: Float,
+    y: Float,
+    unlocked: Boolean = false,
+) {
+    var position by mutableStateOf(Offset(x, y))
+    var unlocked by mutableStateOf(unlocked)
+    val size = IntSize(200, 200)
+    val rect get() = Rect(position, size.width, size.height)
+}
+
+class MovingState() {
+    var selectorPosition by mutableStateOf(Offset.Unspecified)
+    val selectorSize = IntSize(150, 150)
+    val selectorRect get(): Rect = Rect(selectorPosition, selectorSize.width, selectorSize.height)
+
+    var progress by mutableStateOf<Pair<AreaType, Float>?>(null)
+}
+
+fun Rect(selectorPosition: Offset, width: Int, height: Int): Rect =
+    Rect(
+        left = selectorPosition.x - width / 2,
+        right = selectorPosition.x + width / 2,
+        top = selectorPosition.y - height / 2,
+        bottom = selectorPosition.y + height / 2,
+    )
