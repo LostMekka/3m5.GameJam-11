@@ -17,7 +17,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import kotlinx.coroutines.delay
-import kotlin.math.sqrt
+import kotlin.random.Random
 
 @Composable
 fun EnemyWindows(state: GameState) {
@@ -37,7 +37,9 @@ private val enemyButtonColor = Color(0xFFDD0000)
 @Composable
 fun EnemyWindow(state: EnemyState, player: PlayerState, onDeath: () -> Unit) {
     val onClick = {
-        state.hp -= player.baseDamage
+        if (Random.nextFloat() > state.evasion)
+            state.hp -= player.baseDamage
+
         if (state.hp <= 0) onDeath()
     }
 
@@ -119,7 +121,7 @@ fun computeAlignment(me: EnemyState, enemies: SnapshotStateList<EnemyState>): Of
 
     if (v == Offset.Zero) return Offset.Zero
 
-    return v.normalize()
+    return v.normalize(0.8f)
 }
 
 fun computeCohesion(me: EnemyState, enemies: SnapshotStateList<EnemyState>): Offset {

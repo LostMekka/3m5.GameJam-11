@@ -121,14 +121,17 @@ class EnemyState(
     width: Int = 90,
     height: Int = 100,
     val dropInventory: Inventory = Inventory(),
+    speed: Float? = null,
+    evasion: Float? = null,
 ) {
     val id: UUID = UUID.randomUUID()
     var hp by mutableStateOf(hp)
     val maxHp = hp
     var position by mutableStateOf(Rect(x.toFloat(), y.toFloat(), width.toFloat(), height.toFloat()))
     var velocity by mutableStateOf(Offset.Zero)
-    val speed: Float = 4f
     var cooldown by mutableStateOf(10)
+    val speed = speed ?: 4f
+    val evasion = evasion ?: 0f
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is EnemyState && other.id == id

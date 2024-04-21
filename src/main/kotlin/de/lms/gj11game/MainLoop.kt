@@ -1,7 +1,7 @@
 package de.lms.gj11game
 
-import de.lms.gj11game.data.LootTableEntry
 import de.lms.gj11game.data.resourceDepositDropTable
+import de.lms.gj11game.data.spawnTable
 import de.lms.gj11game.data.toInventory
 import kotlinx.coroutines.delay
 import kotlin.random.Random
@@ -29,16 +29,20 @@ private fun updateFirePit(state: GameState, dt: Float) {
 }
 
 private fun spawnEnemies(state: GameState) {
-    if (state.enemies.size < 5 && Random.nextDouble() > 0.9) {
-        state.enemies += EnemyState(
-            hp = 10,
-            x = Random.nextInt(300, 1000),
-            y = Random.nextInt(300, 600),
-            dropInventory = listOf(
-                LootTableEntry(ResourceType.Meat, 0, 5),
-                LootTableEntry(ResourceType.Bones, 0, 3),
-            ).toInventory(state.player.enemyLootMultiplier),
-        )
+    spawnTable[state.currentArea]?.also { spawnInfo ->
+        if (state.enemies.size < spawnInfo.enemyLimit && Random.nextDouble() > 0.9) {
+            val which = Random.nextInt(spawnInfo.enemies.size)
+            val enemyInfo = spawnInfo.enemies[which]
+
+            state.enemies += EnemyState(
+                hp = enemyInfo.hp,
+                x = Random.nextInt(300, 1000),
+                y = Random.nextInt(300, 600),
+                dropInventory = enemyInfo.dropTable.toInventory(state.player.enemyLootMultiplier),
+                evasion = enemyInfo.evasion,
+                speed = enemyInfo.speed,
+            )
+        }
     }
 }
 
