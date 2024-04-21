@@ -1,6 +1,8 @@
 package de.lms.gj11game
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -17,8 +19,9 @@ import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @Composable
-fun CraftingStationView(stationState: CraftingStationState, gameState: GameState, playerIsInRange: Boolean) {
-    Column {
+fun CraftingStationView(stationState: CraftingStationState, gameState: GameState, playerIsInRange: Boolean) = Column {
+    if (!playerIsInRange) Text("out of range!")
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         var disableAll = !playerIsInRange
         when (stationState.station.specialMechanic) {
             FirePit -> {
@@ -58,7 +61,6 @@ fun CraftingStationView(stationState: CraftingStationState, gameState: GameState
             null -> Unit
         }
 
-        if (!playerIsInRange) Text("out of range!")
         if (stationState.actions.isNotEmpty()) {
             Spacer(modifier = Modifier.height(4.dp))
             Text("Actions:")
