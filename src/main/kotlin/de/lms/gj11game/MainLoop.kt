@@ -19,7 +19,14 @@ suspend fun mainLoop(state: GameState) {
         handleDamage(state)
         updateResourceScanning(state, dt)
         updateCraftingVisibility(state.craftingStation, state)
+        updateFirePit(state, dt)
     }
+}
+
+@Suppress("SameParameterValue")
+private fun updateFirePit(state: GameState, dt: Float) {
+    state.firePit.fuelAmount -= state.firePit.fuelBurnRate * dt
+    if (state.firePit.fuelAmount < 0f) state.firePit.fuelAmount = 0f
 }
 
 fun updateCraftingVisibility(stationState: CraftingStationState, gameState: GameState) {

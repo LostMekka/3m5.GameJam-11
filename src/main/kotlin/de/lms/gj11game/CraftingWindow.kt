@@ -10,33 +10,47 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
+import de.lms.gj11game.data.CraftingStationSpecialMechanic
 import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 
 @Composable
 fun CraftingStationView(stationState: CraftingStationState, gameState: GameState) {
     Column {
-        for (actionState in stationState.actions) CraftingActionView(actionState, gameState)
+        var disableAll = false
+        if (stationState.station.specialMechanic == CraftingStationSpecialMechanic.FirePit) {
+            disableAll = gameState.firePit.fuelAmount <= 0
+            Text("Fuel: ${(gameState.firePit.fuelAmount * 100).roundToInt()}%")
+            Button(
+                onClick = { gameState.firePit.fuelAmount += 1f },
+                enabled = gameState.firePit.fuelAmount < 5f,
+            ) {
+                Text("Refuel (Wood:1)")
+            }
+        }
+
+        for (actionState in stationState.actions) CraftingActionView(actionState, gameState, disableAll)
         for (innerStation in stationState.innerStations) {
-            CraftingStationUnlockView(innerStation, gameState)
+            CraftingStationUnlockView(innerStation, gameState, disableAll)
         }
     }
 }
 
 @Composable
-fun CraftingActionView(actionState: CraftingActionState, gameState: GameState) {
+fun CraftingActionView(actionState: CraftingActionState, gameState: GameState, disableAll: Boolean) {
     if (actionState.visible) Button(
         onClick = {
             gameState.inventory -= actionState.action.cost
             actionState.action.action(gameState)
         },
-        enabled = actionState.action.cost in gameState.inventory,
+        enabled = !disableAll && actionState.action.cost in gameState.inventory,
     ) {
         Text("${actionState.action.name} (${actionState.action.cost.toShortString()})")
     }
 }
 
 @Composable
-fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: GameState) {
+fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: GameState, disableAll: Boolean = false) {
     if (stationState.state == ActionButtonState.Unlocked) {
         Window(
             onCloseRequest = {},
@@ -69,7 +83,7 @@ fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: Gam
                 gameState.inventory -= stationState.station.cost
                 stationState.state = ActionButtonState.Unlocked
             },
-            enabled = stationState.station.cost in gameState.inventory,
+            enabled = !disableAll && stationState.station.cost in gameState.inventory,
         ) {
             Text("Unlock ${stationState.station.name} (${stationState.station.cost.toShortString()})")
         }

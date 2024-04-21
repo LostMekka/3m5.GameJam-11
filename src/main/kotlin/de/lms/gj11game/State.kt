@@ -43,10 +43,16 @@ class GameState {
     var currentArea by mutableStateOf(AreaType.Plains)
     var resourceScanningProgress by mutableStateOf<Float?>(null)
     val inventory = Inventory()
-    var player by mutableStateOf(PlayerState())
+    val player = PlayerState()
     val enemies = mutableStateListOf<EnemyState>()
     val resourceFields = mutableStateListOf<ResourceFieldState>()
     val craftingStation = CraftingStationState(globalStation)
+    val firePit = FirePitState()
+}
+
+class FirePitState {
+    var fuelAmount by mutableStateOf(0f)
+    var fuelBurnRate by mutableStateOf(0.05f)
 }
 
 enum class ActionButtonState { Hidden, Visible, Unlocked }
