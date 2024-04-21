@@ -23,14 +23,12 @@ import kotlin.math.sqrt
 fun EnemyWindows(state: GameState) {
     for (enemy in state.enemies) EnemyWindow(enemy, state.player) {
         state.enemies -= enemy
-        if (enemy.dropInventory.isNotEmpty()) {
-            state.resourceFields += ResourceFieldState(
-                x = enemy.position.x,
-                y = enemy.position.y,
-                inventory = enemy.dropInventory,
-                spawnsRevealed = true,
-            )
-        }
+        state.resourceFields += ResourceFieldState(
+            x = enemy.position.x,
+            y = enemy.position.y,
+            inventory = enemy.dropInventory,
+            spawnsRevealed = true,
+        )
     }
 }
 

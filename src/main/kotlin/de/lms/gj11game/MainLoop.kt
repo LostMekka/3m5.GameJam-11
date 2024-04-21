@@ -1,5 +1,6 @@
 package de.lms.gj11game
 
+import de.lms.gj11game.data.LootTableEntry
 import de.lms.gj11game.data.resourceDepositDropTable
 import de.lms.gj11game.data.toInventory
 import kotlinx.coroutines.delay
@@ -33,10 +34,10 @@ private fun spawnEnemies(state: GameState) {
             hp = 10,
             x = Random.nextInt(300, 1000),
             y = Random.nextInt(300, 600),
-            dropInventory = Inventory(
-                ResourceType.Meat * (Random.nextInt(5)),
-                ResourceType.Bones * (Random.nextInt(3)),
-            ),
+            dropInventory = listOf(
+                LootTableEntry(ResourceType.Meat, 0, 5),
+                LootTableEntry(ResourceType.Bones, 0, 3),
+            ).toInventory(),
         )
     }
 }

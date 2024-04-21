@@ -32,7 +32,9 @@ enum class ResourceType {
     Meat,
     Bones,
 }
+
 data class ResourcePack(val type: ResourceType, val amount: Int)
+
 operator fun ResourceType.times(amount: Int) = ResourcePack(this, amount)
 
 class GameState {
@@ -69,12 +71,16 @@ class CraftingStationState(val station: CraftingStation, unlocked: Boolean = fal
 
 class CraftingActionState(val action: CraftingAction)
 
-class Inventory(vararg resources: ResourcePack): Iterable<Map.Entry<ResourceType, Int>> {
+class Inventory(vararg resources: ResourcePack) : Iterable<Map.Entry<ResourceType, Int>> {
     private val stateMap = mutableStateMapOf<ResourceType, Int>().also {
         for ((type, amount) in resources) it[type] = amount
     }
+
     operator fun get(type: ResourceType) = stateMap[type] ?: 0
-    operator fun set(type: ResourceType, value: Int) { stateMap[type] = value }
+    operator fun set(type: ResourceType, value: Int) {
+        stateMap[type] = value
+    }
+
     override operator fun iterator() = stateMap.iterator()
     operator fun contains(type: ResourceType) = stateMap.containsKey(type)
     operator fun contains(resources: ResourcePack) = this[resources.type] >= resources.amount
@@ -82,9 +88,17 @@ class Inventory(vararg resources: ResourcePack): Iterable<Map.Entry<ResourceType
     operator fun plusAssign(other: Inventory) {
         for ((type, amount) in other) this[type] += amount
     }
+
     operator fun minusAssign(other: Inventory) {
         for ((type, amount) in other) this[type] -= amount
     }
+
+    fun clearEmptySlots() {
+        for (type in ResourceType.entries) if (this[type] <= 0) stateMap -= type
+    }
+
+    fun isClear() = stateMap.isEmpty()
+    fun isNotClear() = stateMap.isNotEmpty()
     fun isEmpty() = stateMap.all { it.value <= 0 }
     fun isNotEmpty() = stateMap.isNotEmpty() && stateMap.any { it.value > 0 }
     val size get() = stateMap.size

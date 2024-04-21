@@ -25,7 +25,7 @@ fun ResourceInventoryWindow(state: GameState) {
             }
         }
         Column {
-            if (state.inventory.isEmpty()) Text("Nothing here...")
+            if (state.inventory.isClear()) Text("Nothing here...")
             for (type in ResourceType.entries) {
                 if (type in state.inventory) {
                     Text("$type: ${state.inventory[type]}")

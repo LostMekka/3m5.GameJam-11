@@ -22,7 +22,8 @@ fun Iterable<LootTableEntry>?.toInventory() = Inventory().also {
 
 operator fun Inventory.plusAssign(entry: LootTableEntry?) {
     if (entry != null && Random.nextDouble() <= entry.dropProbability) {
-        this[entry.type] += Random.nextInt(entry.minAmount, entry.maxAmount + 1)
+        val amount = Random.nextInt(entry.minAmount, entry.maxAmount + 1)
+        if (amount > 0) this[entry.type] += amount
     }
 }
 

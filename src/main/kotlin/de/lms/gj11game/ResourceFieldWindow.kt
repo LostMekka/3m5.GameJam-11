@@ -55,7 +55,7 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
                 if (!inRange) Text("out of range!")
 
                 if (state.isRevealed) {
-                    if (state.inventory.isEmpty()) Text("no resources found")
+                    if (state.inventory.isClear()) Text("no resources found")
 
                     for ((type, amount) in state.inventory) {
                         Button(
