@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import de.lms.gj11game.data.CraftingAction
 import de.lms.gj11game.data.CraftingStation
+import de.lms.gj11game.data.CraftingUpgrade
 import de.lms.gj11game.data.globalStation
 import de.lms.gj11game.helper.*
 import java.util.*
@@ -66,10 +67,16 @@ class CraftingStationState(val station: CraftingStation, unlocked: Boolean = fal
     var unlocked by mutableStateOf(unlocked)
     var position by mutableStateOf(Rect.randomOnScreen(400f, 400f))
     val actions = station.actions.map { CraftingActionState(it) }
+    val upgrades = station.upgrades.map { CraftingUpgradeState(it) }
     val innerStations = station.innerStations.map { CraftingStationState(it) }
 }
 
 class CraftingActionState(val action: CraftingAction)
+class CraftingUpgradeState(val upgrade: CraftingUpgrade) {
+    var currentIndex by mutableStateOf(0)
+    val isDone get() = currentIndex >= upgrade.levels.size
+    val currentLevel get() = upgrade.levels.getOrNull(currentIndex)
+}
 
 class Inventory(vararg resources: ResourcePack) : Iterable<Map.Entry<ResourceType, Int>> {
     private val stateMap = mutableStateMapOf<ResourceType, Int>().also {
@@ -85,7 +92,7 @@ class Inventory(vararg resources: ResourcePack) : Iterable<Map.Entry<ResourceTyp
     operator fun contains(type: ResourceType) = stateMap.containsKey(type)
     operator fun contains(resources: ResourcePack) = this[resources.type] >= resources.amount
     operator fun contains(resources: Inventory) = resources.all { (type, amount) -> this[type] >= amount }
-    operator fun plusAssign(other: Inventory) {
+    fun add(other: Inventory) {
         for ((type, amount) in other) this[type] += amount
     }
 
@@ -131,8 +138,10 @@ class PlayerState {
     var hp by mutableStateOf(100)
     var baseDamage by mutableStateOf(1)
     var resourceScanningSpeed by mutableStateOf(0.4f) // TODO: make smaller initially
+    var resourceScanningStacks by mutableStateOf(1)
     var resourceRevealSpeed by mutableStateOf(0.1f) // TODO: make smaller initially
     var resourceMiningSpeed by mutableStateOf(1)
+    var enemyLootMultiplier by mutableStateOf(1f)
     var interactionRange by mutableStateOf(1f)
     var statsWindowVisible by mutableStateOf(true)
     var position by mutableStateOf(Rect(0f, 0f, 250f, 150f))
@@ -165,6 +174,7 @@ class AreaState(
 ) {
     var position by mutableStateOf(rect)
     var unlocked by mutableStateOf(unlocked)
+    var resourceMultiplier by mutableStateOf(1f)
 }
 
 class MovingState {

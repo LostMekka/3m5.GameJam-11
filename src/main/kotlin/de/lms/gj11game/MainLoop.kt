@@ -37,7 +37,7 @@ private fun spawnEnemies(state: GameState) {
             dropInventory = listOf(
                 LootTableEntry(ResourceType.Meat, 0, 5),
                 LootTableEntry(ResourceType.Bones, 0, 3),
-            ).toInventory(),
+            ).toInventory(state.player.enemyLootMultiplier),
         )
     }
 }
@@ -47,8 +47,9 @@ private fun updateResourceScanning(state: GameState, dt: Float) {
     state.resourceScanningProgress = state.resourceScanningProgress?.let {
         val newProgress = it + state.player.resourceScanningSpeed * dt
         if (newProgress >= 1) {
+            val multiplier = state.areas[state.currentArea]?.resourceMultiplier ?: 1f
             state.resourceFields += ResourceFieldState(
-                inventory = resourceDepositDropTable[state.currentArea].toInventory(),
+                inventory = resourceDepositDropTable[state.currentArea].toInventory(multiplier),
             )
             null
         } else newProgress

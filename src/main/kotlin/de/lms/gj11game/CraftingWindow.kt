@@ -1,10 +1,13 @@
 package de.lms.gj11game
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
@@ -30,9 +33,22 @@ fun CraftingStationView(stationState: CraftingStationState, gameState: GameState
         }
 
         if (!playerIsInRange) Text("out of range!")
-        for (actionState in stationState.actions) CraftingActionView(actionState, gameState, disableAll)
-        for (innerStation in stationState.innerStations) {
-            CraftingStationUnlockView(innerStation, gameState, disableAll)
+        if (stationState.actions.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text("Actions:")
+            for (actionState in stationState.actions) CraftingActionView(actionState, gameState, disableAll)
+        }
+        if (stationState.upgrades.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text("Upgrades:")
+            for (upgradeState in stationState.upgrades) UpgradeActionView(upgradeState, gameState, disableAll)
+        }
+        if (stationState.innerStations.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text("Unlocks:")
+            for (innerStation in stationState.innerStations) {
+                CraftingStationUnlockView(innerStation, gameState, disableAll)
+            }
         }
     }
 }
@@ -47,6 +63,30 @@ fun CraftingActionView(actionState: CraftingActionState, gameState: GameState, d
         enabled = !disableAll && actionState.action.cost in gameState.inventory,
     ) {
         Text("${actionState.action.name} (${actionState.action.cost.toShortString()})")
+    }
+}
+
+@Composable
+fun UpgradeActionView(upgradeState: CraftingUpgradeState, gameState: GameState, disableAll: Boolean) {
+    val level = upgradeState.currentLevel
+    if (level == null) {
+        Button(
+            onClick = {},
+            enabled = false,
+        ) {
+            Text("${upgradeState.upgrade.name} (MAX LVL)")
+        }
+    } else {
+        Button(
+            onClick = {
+                gameState.inventory -= level.cost
+                upgradeState.currentIndex++
+                level.action(gameState)
+            },
+            enabled = !disableAll && level.cost in gameState.inventory,
+        ) {
+            Text("${upgradeState.upgrade.name} (${level.cost.toShortString()})")
+        }
     }
 }
 
@@ -71,6 +111,12 @@ fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: Gam
             }
             val inRange = gameState.playerInInteractionRange(stationState.position)
             CraftingStationView(stationState, gameState, inRange)
+        }
+        Button(
+            onClick = {},
+            enabled = false,
+        ) {
+            Text("${stationState.station.name} (UNLOCKED)")
         }
     } else {
         Button(
