@@ -256,6 +256,15 @@ val globalStation = CraftingStation(
                         CraftingUpgradeLevel(Inventory(Meat * 1000, Bones * 500, Plants * 2000, Wood * 2000, Stone * 2000)) { player.enemyLootMultiplier = 47f },
                     ),
                 ),
+                CraftingUpgrade(
+                    name = "Player Damage",
+                    levels = listOf(
+                        CraftingUpgradeLevel(Inventory(Wood * 100, Bones * 50)) { player.baseDamage++ },
+                        CraftingUpgradeLevel(Inventory(Wood * 200, Bones * 100)) { player.baseDamage++ },
+                        CraftingUpgradeLevel(Inventory(Wood * 500, Bones * 200)) { player.baseDamage++ },
+                        CraftingUpgradeLevel(Inventory(Wood * 1000, Bones * 400)) { player.baseDamage++ },
+                    ),
+                ),
             ),
             innerStations = listOf(
                 scoutingTowerStation,
