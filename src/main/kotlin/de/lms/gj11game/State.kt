@@ -165,7 +165,7 @@ class ResourceFieldState(
     val isRevealed get() = revealProgress >= 1f
     var stability by mutableStateOf(1f)
     var isCollapsed by mutableStateOf(false)
-    var position by mutableStateOf(Rect.fromMidpoint(x, y, width, height))
+    var position by mutableStateOf(Rect.fromMidpoint(x, maxOf(y, height / 2f), width, height))
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is ResourceFieldState && other.id == id
