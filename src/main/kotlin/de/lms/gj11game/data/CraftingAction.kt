@@ -26,6 +26,8 @@ data class CraftingStation(
     val name: String,
     val cost: Inventory,
     val specialMechanic: CraftingStationSpecialMechanic? = null,
+    val homeArea: AreaType? = null,
+    val onUnlock: GameState.() -> Unit = {},
     val actions: List<CraftingAction> = emptyList(),
     val upgrades: List<CraftingUpgrade> = emptyList(),
     val innerStations: List<CraftingStation> = emptyList(),
@@ -33,6 +35,7 @@ data class CraftingStation(
 
 enum class CraftingStationSpecialMechanic {
     FirePit,
+    Farm,
 }
 
 private val scoutingTowerStation = CraftingStation(
@@ -131,6 +134,20 @@ private val scoutingTowerStation = CraftingStation(
     ),
 )
 
+private val constructionGuildStation = CraftingStation(
+    name = "Construction Guild",
+    cost = Inventory(Wood * 100, Stone * 200, Bones * 50),
+    innerStations = listOf(
+        CraftingStation(
+            name = "Farm",
+            cost = Inventory(Wood * 200, Stone * 50, Bones * 100),
+            specialMechanic = CraftingStationSpecialMechanic.Farm,
+            homeArea = AreaType.Plains,
+            onUnlock = { farm.unlocked = true },
+        ),
+    ),
+)
+
 val globalStation = CraftingStation(
     name = "Crafting",
     cost = Inventory(Plants * 10),
@@ -155,9 +172,9 @@ val globalStation = CraftingStation(
                 CraftingUpgrade(
                     name = "Looting Speed",
                     levels = listOf(
-                        CraftingUpgradeLevel(Inventory(Plants * 20, Wood * 20, Stone * 5)) { player.resourceMiningSpeed = 2 },
-                        CraftingUpgradeLevel(Inventory(Plants * 100, Wood * 100, Stone * 100)) { player.resourceMiningSpeed = 5 },
-                        CraftingUpgradeLevel(Inventory(Plants * 400, Wood * 400, Stone * 400)) { player.resourceMiningSpeed = 20 },
+                        CraftingUpgradeLevel(Inventory(Plants * 20, Wood * 20, Stone * 5)) { player.resourceLootingAmount = 2 },
+                        CraftingUpgradeLevel(Inventory(Plants * 100, Wood * 100, Stone * 100)) { player.resourceLootingAmount = 5 },
+                        CraftingUpgradeLevel(Inventory(Plants * 400, Wood * 400, Stone * 400)) { player.resourceLootingAmount = 20 },
                     ),
                 ),
                 CraftingUpgrade(
@@ -172,6 +189,7 @@ val globalStation = CraftingStation(
             ),
             innerStations = listOf(
                 scoutingTowerStation,
+                constructionGuildStation,
             ),
         ),
     ),

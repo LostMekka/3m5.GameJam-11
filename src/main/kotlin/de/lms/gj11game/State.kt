@@ -43,11 +43,14 @@ class GameState {
     var resourceScanningProgress by mutableStateOf(0f)
     var resourceScanningStacks by mutableStateOf(0)
     val inventory = Inventory()
+//    cheat for debugging. dont comment in and commit lol
+//        .also { for (t in ResourceType.entries) it[t] = 99999 }
     val player = PlayerState()
     val enemies = mutableStateListOf<EnemyState>()
     val resourceFields = mutableStateListOf<ResourceFieldState>()
     val craftingStation = CraftingStationState(globalStation)
     val firePit = FirePitState()
+    val farm = FarmState()
     val areas = mutableStateMapOf(
         Pair(AreaType.Plains, AreaState(AreaType.Plains, Rect.randomOnScreen(200f, 200f), unlocked = true)),
         Pair(AreaType.Forest, AreaState(AreaType.Forest, Rect.randomOnScreen(200f, 200f), unlocked = true)),
@@ -62,6 +65,13 @@ class GameState {
 class FirePitState {
     var fuelAmount by mutableStateOf(0f)
     var fuelBurnRate by mutableStateOf(0.05f)
+}
+
+class FarmState {
+    var unlocked by mutableStateOf(false)
+    var amount by mutableStateOf(0f)
+    var maxAmount by mutableStateOf(50)
+    var generationSpeed by mutableStateOf(0.25f)
 }
 
 class CraftingStationState(val station: CraftingStation, unlocked: Boolean = false) {
@@ -144,7 +154,7 @@ class PlayerState {
     var resourceScanningSpeed by mutableStateOf(0.2f)
     var resourceScanningStacks by mutableStateOf(1)
     var resourceRevealSpeed by mutableStateOf(0.15f)
-    var resourceMiningSpeed by mutableStateOf(1)
+    var resourceLootingAmount by mutableStateOf(1)
     var enemyLootMultiplier by mutableStateOf(1f)
     var interactionRange by mutableStateOf(1f)
     var statsWindowVisible by mutableStateOf(true)

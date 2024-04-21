@@ -59,7 +59,7 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
                     for ((type, amount) in state.inventory) {
                         Button(
                             onClick = {
-                                val n = min(gameState.player.resourceMiningSpeed, amount)
+                                val n = min(gameState.player.resourceLootingAmount, amount)
                                 gameState.inventory[type] += n
                                 state.inventory[type] -= n
                             },

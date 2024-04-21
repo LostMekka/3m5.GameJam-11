@@ -1,9 +1,8 @@
 package de.lms.gj11game
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
-import de.lms.gj11game.data.CraftingStationSpecialMechanic
+import de.lms.gj11game.data.CraftingStationSpecialMechanic.*
 import de.lms.gj11game.helper.playerInInteractionRange
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
@@ -21,15 +20,40 @@ import kotlin.math.roundToInt
 fun CraftingStationView(stationState: CraftingStationState, gameState: GameState, playerIsInRange: Boolean) {
     Column {
         var disableAll = !playerIsInRange
-        if (stationState.station.specialMechanic == CraftingStationSpecialMechanic.FirePit) {
-            disableAll = gameState.firePit.fuelAmount <= 0
-            Text("Fuel: ${(gameState.firePit.fuelAmount * 100).roundToInt()}%")
-            Button(
-                onClick = { gameState.firePit.fuelAmount += 1f },
-                enabled = playerIsInRange && gameState.firePit.fuelAmount < 5f,
-            ) {
-                Text("Refuel (Wood:1)")
+        when (stationState.station.specialMechanic) {
+            FirePit -> {
+                disableAll = gameState.firePit.fuelAmount <= 0
+                Text("Fuel: ${(gameState.firePit.fuelAmount * 100).roundToInt()}%")
+                Button(
+                    onClick = { gameState.firePit.fuelAmount += 1f },
+                    enabled = playerIsInRange && gameState.firePit.fuelAmount < 5f,
+                ) {
+                    Text("Refuel (Wood:1)")
+                }
             }
+
+            Farm -> {
+                val readyAmount = gameState.farm.amount.toInt()
+                Row {
+                    Text("Farming Plants...")
+                    CircularProgressIndicator(
+                        progress = gameState.farm.amount % 1f,
+                        modifier = Modifier.width(20.dp).height(20.dp),
+                    )
+                }
+                Button(
+                    onClick = {
+                        val lootAmount = minOf(readyAmount, gameState.player.resourceLootingAmount)
+                        gameState.farm.amount -= lootAmount
+                        gameState.inventory[ResourceType.Plants] += lootAmount
+                    },
+                    enabled = playerIsInRange && readyAmount > 0,
+                ) {
+                    Text("Take (Plants:$readyAmount)")
+                }
+            }
+
+            null -> Unit
         }
 
         if (!playerIsInRange) Text("out of range!")
@@ -92,6 +116,7 @@ fun UpgradeActionView(upgradeState: CraftingUpgradeState, gameState: GameState, 
 
 @Composable
 fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: GameState, disableAll: Boolean = false) {
+    if (stationState.station.homeArea != null && gameState.currentArea != stationState.station.homeArea) return
     if (stationState.unlocked) {
         Window(
             onCloseRequest = {},
@@ -123,6 +148,7 @@ fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: Gam
             onClick = {
                 gameState.inventory -= stationState.station.cost
                 stationState.unlocked = true
+                stationState.station.onUnlock(gameState)
             },
             enabled = !disableAll && stationState.station.cost in gameState.inventory,
         ) {
