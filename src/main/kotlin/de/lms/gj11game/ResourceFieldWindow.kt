@@ -72,12 +72,6 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
                     Text("Stability: ${floor(state.stability * 1000) / 10}%")
                 } else {
                     Text("Reveal progress: ${floor(state.revealProgress * 100)}%")
-                    Button(
-                        onClick = { state.revealProgress += gameState.player.resourceRevealSpeed },
-                        enabled = inRange,
-                    ) {
-                        Text("Reveal")
-                    }
                 }
             }
         }

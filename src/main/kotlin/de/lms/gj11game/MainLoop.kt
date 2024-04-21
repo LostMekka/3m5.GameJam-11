@@ -3,6 +3,7 @@ package de.lms.gj11game
 import de.lms.gj11game.data.resourceDepositDropTable
 import de.lms.gj11game.data.spawnTable
 import de.lms.gj11game.data.toInventory
+import de.lms.gj11game.helper.playerInInteractionRange
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -18,7 +19,17 @@ suspend fun mainLoop(state: GameState) {
         moveEnemies(state)
         handleDamage(state)
         updateResourceScanning(state, dt)
+        updateResourceFields(state, dt)
         updateFirePit(state, dt)
+    }
+}
+
+@Suppress("SameParameterValue")
+private fun updateResourceFields(gameState: GameState, dt: Float) {
+    for (resourceState in gameState.resourceFields) {
+        if (!resourceState.isRevealed && gameState.playerInInteractionRange(resourceState.position)) {
+            resourceState.revealProgress += gameState.player.resourceRevealSpeed * dt
+        }
     }
 }
 

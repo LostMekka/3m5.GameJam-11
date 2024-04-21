@@ -140,9 +140,9 @@ class EnemyState(
 class PlayerState {
     var hp by mutableStateOf(100)
     var baseDamage by mutableStateOf(1)
-    var resourceScanningSpeed by mutableStateOf(0.4f) // TODO: make smaller initially
+    var resourceScanningSpeed by mutableStateOf(0.2f)
     var resourceScanningStacks by mutableStateOf(1)
-    var resourceRevealSpeed by mutableStateOf(0.1f) // TODO: make smaller initially
+    var resourceRevealSpeed by mutableStateOf(0.15f)
     var resourceMiningSpeed by mutableStateOf(1)
     var enemyLootMultiplier by mutableStateOf(1f)
     var interactionRange by mutableStateOf(1f)
