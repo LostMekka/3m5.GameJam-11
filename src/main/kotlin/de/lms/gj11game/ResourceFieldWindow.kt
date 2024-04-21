@@ -65,7 +65,7 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
                             },
                             enabled = inRange && amount > 0,
                         ) {
-                            Text("Mine $type ($amount)")
+                            Text("Loot $type ($amount)")
                         }
                     }
 
@@ -76,7 +76,7 @@ fun ResourceFieldWindow(state: ResourceFieldState, gameState: GameState) {
                         onClick = { state.revealProgress += gameState.player.resourceRevealSpeed },
                         enabled = inRange,
                     ) {
-                        Text("Dig")
+                        Text("Reveal")
                     }
                 }
             }
