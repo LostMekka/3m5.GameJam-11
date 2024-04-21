@@ -25,7 +25,7 @@ fun CraftingStationView(stationState: CraftingStationState, gameState: GameState
         var disableAll = !playerIsInRange
         when (stationState.station.specialMechanic) {
             FirePit -> {
-                disableAll = gameState.firePit.fuelAmount <= 0
+                disableAll = disableAll || gameState.firePit.fuelAmount <= 0
                 Text("Fuel: ${(gameState.firePit.fuelAmount * 100).roundToInt()}%")
                 Button(
                     onClick = { gameState.firePit.fuelAmount += 1f },
