@@ -32,4 +32,9 @@ val resourceDepositDropTable = mapOf(
         LootTableEntry(ResourceType.Wood, 1, 4, 0.7),
         LootTableEntry(ResourceType.Stone, 1, 2, 0.5),
     ),
+    AreaType.Forest to listOf(
+        LootTableEntry(ResourceType.Plants, 1, 3, 0.2),
+        LootTableEntry(ResourceType.Wood, 3, 10),
+        LootTableEntry(ResourceType.Stone, 1, 2, 0.3),
+    )
 )
