@@ -50,7 +50,8 @@ class GameState {
     val resourceFields = mutableStateListOf<ResourceFieldState>()
     val craftingStation = CraftingStationState(globalStation)
     val firePit = FirePitState()
-    val farm = FarmState()
+    val farm = ResourceGeneratorState(ResourceType.Plants, 50, 0.25f)
+    val sawmill = ResourceGeneratorState(ResourceType.Wood, 50, 0.25f)
     val areas = mutableStateMapOf(
         Pair(AreaType.Plains, AreaState(AreaType.Plains, Rect.randomOnScreen(200f, 200f), unlocked = true)),
         Pair(AreaType.Forest, AreaState(AreaType.Forest, Rect.randomOnScreen(200f, 200f), unlocked = true)),
@@ -67,11 +68,11 @@ class FirePitState {
     var fuelBurnRate by mutableStateOf(0.05f)
 }
 
-class FarmState {
+class ResourceGeneratorState(val resourceType: ResourceType, maxAmount: Int, generationSpeed: Float) {
     var unlocked by mutableStateOf(false)
     var amount by mutableStateOf(0f)
-    var maxAmount by mutableStateOf(50)
-    var generationSpeed by mutableStateOf(0.25f)
+    var maxAmount by mutableStateOf(maxAmount)
+    var generationSpeed by mutableStateOf(generationSpeed)
 }
 
 class CraftingStationState(val station: CraftingStation, unlocked: Boolean = false) {

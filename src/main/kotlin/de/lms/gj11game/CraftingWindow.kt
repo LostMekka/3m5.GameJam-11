@@ -32,24 +32,26 @@ fun CraftingStationView(stationState: CraftingStationState, gameState: GameState
                 }
             }
 
-            Farm -> {
-                val readyAmount = gameState.farm.amount.toInt()
+            is ResourceGenerator -> {
+                val generatorState = stationState.station.specialMechanic.stateSelector(gameState)
+                val readyAmount = generatorState.amount.toInt()
                 Row {
-                    Text("Farming Plants...")
+                    Text("Generating... (${generatorState.resourceType})")
+                    Spacer(Modifier.width(5.dp))
                     CircularProgressIndicator(
-                        progress = gameState.farm.amount % 1f,
+                        progress = generatorState.amount % 1f,
                         modifier = Modifier.width(20.dp).height(20.dp),
                     )
                 }
                 Button(
                     onClick = {
                         val lootAmount = minOf(readyAmount, gameState.player.resourceLootingAmount)
-                        gameState.farm.amount -= lootAmount
-                        gameState.inventory[ResourceType.Plants] += lootAmount
+                        generatorState.amount -= lootAmount
+                        gameState.inventory[generatorState.resourceType] += lootAmount
                     },
                     enabled = playerIsInRange && readyAmount > 0,
                 ) {
-                    Text("Take (Plants:$readyAmount)")
+                    Text("Take (${generatorState.resourceType}:$readyAmount)")
                 }
             }
 
@@ -116,9 +118,9 @@ fun UpgradeActionView(upgradeState: CraftingUpgradeState, gameState: GameState, 
 
 @Composable
 fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: GameState, disableAll: Boolean = false) {
-    if (stationState.station.homeArea != null && gameState.currentArea != stationState.station.homeArea) return
+    val validArea = stationState.station.homeArea == null || gameState.currentArea == stationState.station.homeArea
     if (stationState.unlocked) {
-        Window(
+        if (validArea) Window(
             onCloseRequest = {},
             state = WindowState(
                 width = stationState.position.width.dp,
@@ -149,10 +151,12 @@ fun CraftingStationUnlockView(stationState: CraftingStationState, gameState: Gam
                 gameState.inventory -= stationState.station.cost
                 stationState.unlocked = true
                 stationState.station.onUnlock(gameState)
+                (stationState.station.specialMechanic as? ResourceGenerator)?.let { it.stateSelector(gameState).unlocked = true }
             },
-            enabled = !disableAll && stationState.station.cost in gameState.inventory,
+            enabled = validArea && !disableAll && stationState.station.cost in gameState.inventory,
         ) {
-            Text("Unlock ${stationState.station.name} (${stationState.station.cost.toShortString()})")
+            val areaHint = if (validArea) "" else " (only in ${stationState.station.homeArea})"
+            Text("Unlock ${stationState.station.name} (${stationState.station.cost.toShortString()})$areaHint")
         }
     }
 }

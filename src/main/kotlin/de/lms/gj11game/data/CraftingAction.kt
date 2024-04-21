@@ -1,10 +1,7 @@
 package de.lms.gj11game.data
 
-import de.lms.gj11game.AreaType
-import de.lms.gj11game.GameState
-import de.lms.gj11game.Inventory
+import de.lms.gj11game.*
 import de.lms.gj11game.ResourceType.*
-import de.lms.gj11game.times
 
 data class CraftingAction(
     val name: String,
@@ -33,9 +30,11 @@ data class CraftingStation(
     val innerStations: List<CraftingStation> = emptyList(),
 )
 
-enum class CraftingStationSpecialMechanic {
-    FirePit,
-    Farm,
+sealed class CraftingStationSpecialMechanic {
+    data object FirePit : CraftingStationSpecialMechanic()
+    data class ResourceGenerator(
+        val stateSelector: GameState.() -> ResourceGeneratorState,
+    ) : CraftingStationSpecialMechanic()
 }
 
 private val scoutingTowerStation = CraftingStation(
@@ -141,9 +140,14 @@ private val constructionGuildStation = CraftingStation(
         CraftingStation(
             name = "Farm",
             cost = Inventory(Wood * 200, Stone * 50, Bones * 100),
-            specialMechanic = CraftingStationSpecialMechanic.Farm,
+            specialMechanic = CraftingStationSpecialMechanic.ResourceGenerator { farm },
             homeArea = AreaType.Plains,
-            onUnlock = { farm.unlocked = true },
+        ),
+        CraftingStation(
+            name = "Sawmill",
+            cost = Inventory(Wood * 200, Stone * 200),
+            specialMechanic = CraftingStationSpecialMechanic.ResourceGenerator { sawmill },
+            homeArea = AreaType.Forest,
         ),
     ),
 )

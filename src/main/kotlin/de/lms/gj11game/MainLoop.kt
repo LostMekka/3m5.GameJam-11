@@ -21,7 +21,8 @@ suspend fun mainLoop(state: GameState) {
         updateResourceScanning(state, dt)
         updateResourceFields(state, dt)
         updateFirePit(state, dt)
-        updateFarm(state, dt)
+        updateResourceGenerator(state.farm, dt)
+        updateResourceGenerator(state.sawmill, dt)
     }
 }
 
@@ -41,10 +42,10 @@ private fun updateFirePit(state: GameState, dt: Float) {
 }
 
 @Suppress("SameParameterValue")
-private fun updateFarm(state: GameState, dt: Float) {
-    if (!state.farm.unlocked) return
-    state.farm.amount += state.farm.generationSpeed * dt
-    if (state.farm.amount > state.farm.maxAmount) state.farm.amount = state.farm.maxAmount.toFloat()
+private fun updateResourceGenerator(state: ResourceGeneratorState, dt: Float) {
+    if (!state.unlocked) return
+    state.amount += state.generationSpeed * dt
+    if (state.amount > state.maxAmount) state.amount = state.maxAmount.toFloat()
 }
 
 private fun spawnEnemies(state: GameState) {
