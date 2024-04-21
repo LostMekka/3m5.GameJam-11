@@ -54,7 +54,7 @@ fun main() = application {
             Text(
                 fontSize = TextUnit(38f, TextUnitType.Sp),
                 textAlign = TextAlign.Center,
-                text = "Window Defenders",
+                text = "Windows Defender",
                 fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(16.dp))
