@@ -39,13 +39,20 @@ fun AreaWindow(area: AreaState, currentArea: AreaType) {
             position = WindowPosition(area.position.x.dp, area.position.y.dp),
         ),
     ) {
-        if (area.areaType == currentArea) Box(modifier = Modifier.fillMaxSize().background(Color.Gray)) {}
+        val boxColor = if (area.areaType == currentArea) Color.Gray else Color.Transparent
+        Column(
+            modifier = Modifier.fillMaxSize().background(boxColor),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(area.areaType.name)
+        }
     }
 }
 
 @Composable
 fun AreaSelectionWindow(state: MovingState, gameState: GameState) {
-   val close = { gameState.moving = null }
+    val close = { gameState.moving = null }
 
     Window(
         onCloseRequest = close,
